@@ -7,9 +7,12 @@ class Lang(Gateway):
     The default is "en".
     
     """
+
     def __init__(self, path: str, lang: str = "en"):
-        filepath = path + "/" + lang + "json"
+        filepath = path + "/" + lang + ".json"
         super().__init__(filepath)
 
-    def _text(self, data: str) -> str:
-        return self.read()[data]
+    def _text(self, *path: str) -> str:
+        data = self.read()
+        for key in path: data = data[key]
+        return data

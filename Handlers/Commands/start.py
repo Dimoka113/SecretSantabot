@@ -1,11 +1,11 @@
 from Bot.loader import bot, lang
 from Data import config
 from pyrogram import Client, types, filters
-
+from Consts.keyboards import Keybords
 
 @bot.on_message(filters.command(commands="start", prefixes=["/", "!"]))
 async def start_command(origin: Client, msg: types.Message):
     if len(msg.text.split()) == 1:
-        await msg.reply(lang._text("start_message"))
+        await msg.reply(text=lang._text("start_message"), reply_markup=Keybords.start())
     else:
-        await msg.reply(lang._text("join_message"))
+        await msg.reply(text=lang._text("join_message"))

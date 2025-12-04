@@ -10,7 +10,7 @@ log = Logger(name="Main")
 
 rooms = Rooms("Data/rooms.json")
 users = Users("Data/users.json")
-lang = Lang("Data", "ru")
+lang = Lang("Data/Langs", "ru")
 
 bot = Client(
     name="SecretSanta", api_id=API_ID, api_hash=API_HASH, bot_token=TOKEN,

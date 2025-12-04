@@ -26,8 +26,8 @@ If unsuccessful, outputs a log with `WARN` and returns `False`.
         try: 
             with open(self.path, "w", encoding="UTF-8") as file: json.dump(data, file, indent=3, ensure_ascii=False)
         except Exception as err:
-            # log.warn(err);
-            return False;
+            # log.warn(err)
+            return False
         else: return True
 
 
@@ -66,6 +66,12 @@ class Users(Gateway):
             "rooms": []}
         return self.white(data)
 
+    def get_user_by_id(self, id: int) -> str:
+        return self.read()[id]
+
+    def get_username_by_id(self, id: int) -> str:
+        return self.read()[id]["Name"]
+    
     def delete_user(self, id: int):
         data = self.read()
         del data[str(id)]

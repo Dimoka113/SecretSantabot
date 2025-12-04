@@ -1,9 +1,35 @@
 {
     "commands": {
-        "start": "Стартовое сообщение и список ваших комнат",
+        "start": "Управление ботом",
         "profile": "Настройки вашего профиля"
     },
-    "start_message": ""
+    "keybords":{
+        "profile":{
+            "edit.name.key_text": "Ник",
+            "edit.age.key_text": "Возраст",
+            "edit.bio.key_text": "О себе",
+            "edit.wishlist.key_text": "Что бы вы хотели?",
+            "edit.netlinks.key_text": "Соц сети",
+
+            "editnetlink.add.key_text": "Добавить ссылку",
+            "editnetlink.edit.key_text": "⚙️{link}",
+
+            "editnetlink.edit.replace.key_text": "Заменить ссылку",
+            "editnetlink.edit.delete.key_text": "Удалить ссылку"
+        },
+
+        "start.createroom.key_text": "Создать новую комнату 🏠",
+        "start.joinroom.key_text": "Войти в комнату 🚪",
+        "start.userrooms.key_text": "Список ваших комнат 🏘",
+        "start.userprofile.key_text": "Ваш профиль 🧶",
+
+
+
+
+        "back.key.text": "Назад ◀️"
+    },
+    "_log_staring_message": "Бот для проведения тайного санты запущен!",
+    "start_message": "Привет, это бот для проведения тайного санты!"
 
 
 

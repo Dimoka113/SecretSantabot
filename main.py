@@ -1,15 +1,18 @@
-from pyrogram import types
+from pyrogram import types, idle
 from Bot.loader import bot, log, lang
 import json, asyncio, requests
 import logging
 from Defs.datastore import Rooms
 logging.basicConfig(level=logging.INFO)
+import Handlers
 
+# async def test():
+#     await bot.start()
 
-
+#     await idle()
 
 
 if __name__ == "__main__":
-    log.info()
+    log.info(lang._text("_log_staring_message"))
+    # bot.run(test())
     bot.run()
-

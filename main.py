@@ -2,7 +2,6 @@ from pyrogram import types, idle
 from Bot.loader import bot, log, lang
 import json, asyncio, requests
 import logging
-from Defs.datastore import Rooms
 logging.basicConfig(level=logging.INFO)
 import Handlers
 

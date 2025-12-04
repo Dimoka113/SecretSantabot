@@ -2,6 +2,7 @@
     "room_id": {
         "name": "Name",
         "money_limit": "12341",
+        "peer_limit": 113,
         "date_created": "Дата",
         "date_intited": "Дата",
         "date_roll": "Дата",

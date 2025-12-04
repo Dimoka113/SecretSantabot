@@ -1,0 +1,4 @@
+*.session
+*/__pycache__
+/Bot/keys.py
+test.py

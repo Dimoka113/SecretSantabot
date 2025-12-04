@@ -1,0 +1,17 @@
+{
+    "room_id": {
+        "name": "Name",
+        "money_limit": "12341",
+        "date_created": "Дата",
+        "date_intited": "Дата",
+        "date_roll": "Дата",
+        "date_limit": "Дата",
+        "admin": [123, true],
+        "coadmins": [
+            [123, true],
+            [3123, true]
+        ],
+        "users": []
+    }
+
+}

@@ -12,7 +12,7 @@ class Lang(Gateway):
         filepath = path + "/" + lang + ".json"
         super().__init__(filepath)
 
-    def _text(self, *path: str) -> str:
+    def _text(self, *path: str) -> str|list[str]:
         data = self.read()
         for key in path: data = data[key]
         return data

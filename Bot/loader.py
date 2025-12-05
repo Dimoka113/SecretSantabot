@@ -17,7 +17,5 @@ bot = Client(
 
     workdir="Bot",
 
-    workers=workers, 
-    max_concurrent_transmissions=max_concurrent_transmissions, 
-    no_updates=no_updates
+    workers=workers, max_concurrent_transmissions=max_concurrent_transmissions, 
 )

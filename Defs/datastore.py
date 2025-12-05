@@ -41,7 +41,7 @@ class Rooms(Gateway):
     name: str, 
     admin_data: list,
     peer_limit: int, 
-    condition_limit: int,   # Условие обмена
+    rule: int,   # Условие обмена
     date_created: datetime, # Время, когда комната была создана
     date_intited: datetime, # Время, когда больше нельзя будет заходить в комнату, и её настраивать
     date_roll: datetime,    # Время, когда запуститься жеребьёвка
@@ -51,7 +51,7 @@ class Rooms(Gateway):
         data[get_random_id()] = {
         "name": name,
         "admin": admin_data,
-        "condition_limit": condition_limit,
+        "rule": rule,
         "peer_limit": peer_limit,
         "date_created": date_created,
         "date_intited": date_intited,
@@ -88,11 +88,23 @@ class Users(Gateway):
     def __init__(self, path): 
         super().__init__(path)
 
+    def get_user_status(self, user_id: int) -> list:
+        return self.read()[str(user_id)]["status"]
+
+    def set_add_user_status(self, user_id: int, status: str) -> bool:
+        data = self.read()
+        data[str(user_id)]["status"].append(status)
+        return self.white(data)
+
+    def set_clear_user_status(self, user_id: int) -> bool:
+        data = self.read()
+        data[str(user_id)]["status"] = []
+        return self.white(data)
 
     def add_user(self, user_id: int, name: str, age: int, wishlist: str, bio: str, soc_networks: str):
         data = self.read()
         data[str(user_id)] = {
-            "create": "",
+            "status": [],
             "Name": name, 
             "Age": age, 
             "Bio": bio, 
@@ -101,13 +113,13 @@ class Users(Gateway):
         }
         return self.white(data)
 
-    def get_user_by_id(self, id: int) -> str:
+    def get_user_by_id(self, user_id: int) -> str:
         return self.read()[id]
 
-    def get_username_by_id(self, id: int) -> str:
+    def get_username_by_id(self, user_id: int) -> str:
         return self.read()[id]["Name"]
     
-    def delete_user(self, id: int):
+    def delete_user(self, user_id: int):
         data = self.read()
         del data[str(id)]
         return self.white(data)

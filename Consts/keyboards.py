@@ -14,6 +14,19 @@ class Keybords(object):
             
         ])
     
+    @classmethod
+    def get_cancel(self, dir_cancel: str): return create_keybord(
+        [
+            [[lang._text(self._, "back.key.text"), dir_cancel]],
+        ])
+
+    @classmethod
+    def get_skip_and_cancel(self, dir_cancel: str, dir_skip: str): 
+        return create_keybord(
+        [
+            [[lang._text(self._, "back.key.text"), dir_skip]],
+            [[lang._text(self._, "cancel.key.text"), dir_cancel]],
+        ])
 
     class Profile(object):
         _ = "profile"

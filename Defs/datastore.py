@@ -88,23 +88,59 @@ class Users(Gateway):
     def __init__(self, path): 
         super().__init__(path)
 
-    def get_user_status(self, user_id: int) -> list:
-        return self.read()[str(user_id)]["status"]
-
-    def set_add_user_status(self, user_id: int, status: str) -> bool:
+    def add_zero_user(self, user_id: int):
         data = self.read()
-        data[str(user_id)]["status"].append(status)
+        data[str(user_id)] = {"status": {"type": "", "origin": "", "messagedata": [], "userdata": []}}
+        return self.white(data)
+    
+    def is_users_exist(self, user_id: int) -> bool:
+        return bool(str(user_id) in self.read())
+
+    def get_user_status_userdata(self, user_id: int) -> list|None:
+        if self.is_users_exist(user_id):
+            return self.read()[str(user_id)]["status"]["userdata"]
+        else:
+            return None
+        
+    def get_messagedata_status(self, user_id: int) -> bool:
+        data = self.read()
+        return data[str(user_id)]["status"]["messagedata"]
+    
+    def get_messagedata_type(self, user_id: int) -> bool:
+        data = self.read()
+        return data[str(user_id)]["status"]["type"]
+    
+    def set_status_origin(self, user_id: int, origin: str) -> bool:
+        data = self.read()
+        data[str(user_id)]["status"]["origin"] = origin
+        return self.white(data)
+
+    def update_messagedata_status(self, user_id: int, chat_id: int, msg_id: int) -> bool:
+        data = self.read()
+        data[str(user_id)]["status"]["messagedata"] = [chat_id, msg_id]
+        return self.white(data)
+
+    def set_userdata_status_type(self, user_id: int, status: str) -> bool:
+        data = self.read()
+        data[str(user_id)]["status"]["type"] = status
+        return self.white(data)
+    
+    def add_userdata_status(self, user_id: int, status: str) -> bool:
+        data = self.read()
+        data[str(user_id)]["status"]["userdata"].append(status)
         return self.white(data)
 
     def set_clear_user_status(self, user_id: int) -> bool:
         data = self.read()
-        data[str(user_id)]["status"] = []
+        data[str(user_id)]["status"]["type"] = ""
+        data[str(user_id)]["status"]["origin"] = ""
+        data[str(user_id)]["status"]["messagedata"] = []
+        data[str(user_id)]["status"]["userdata"] = []
         return self.white(data)
 
     def add_user(self, user_id: int, name: str, age: int, wishlist: str, bio: str, soc_networks: str):
         data = self.read()
         data[str(user_id)] = {
-            "status": [],
             "Name": name, 
             "Age": age, 
             "Bio": bio, 
@@ -114,14 +150,14 @@ class Users(Gateway):
         return self.white(data)
 
     def get_user_by_id(self, user_id: int) -> str:
-        return self.read()[id]
+        return self.read()[user_id]
 
     def get_username_by_id(self, user_id: int) -> str:
-        return self.read()[id]["Name"]
+        return self.read()[user_id]["Name"]
     
     def delete_user(self, user_id: int):
         data = self.read()
-        del data[str(id)]
+        del data[str(user_id)]
         return self.white(data)
     
     def add_user_in_room(self, room_id: int, user_id: int):

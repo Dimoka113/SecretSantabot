@@ -15,9 +15,34 @@ class Keybords(object):
         ])
     
     @classmethod
+    def create_profile(self): return create_keybord(
+        [
+            [[lang._text(self._, "create.userprofile.key_text"), "create.userprofile"]],
+        ])
+
+    @classmethod
     def get_cancel(self, dir_cancel: str): return create_keybord(
         [
             [[lang._text(self._, "back.key.text"), dir_cancel]],
+        ])
+
+    @classmethod
+    def get_skip(self, dir_skip: str): 
+        return create_keybord(
+        [
+            [[lang._text(self._, "skip.key.text"), dir_skip]],
+        ])
+
+    @classmethod
+    def keys_predone_profile(self): 
+        return create_keybord(
+        [
+            [[lang._text(self._, "profile.predone.change_name"), "profile.predone.change_name"]],
+            [[lang._text(self._, "profile.predone.change_age"), "profile.predone.change_age"]],
+            [[lang._text(self._, "profile.predone.change_bio"), "profile.predone.change_bio"]],
+            [[lang._text(self._, "profile.predone.change_wishlist"), "profile.predone.change_wishlist"]],
+            [[lang._text(self._, "profile.predone.change_netlinks"), "profile.predone.change_netlinks"]],
+            [[lang._text(self._, "profile.predone.done"), "profile.predone.done"]],
         ])
 
     @classmethod
@@ -27,9 +52,6 @@ class Keybords(object):
             [[lang._text(self._, "back.key.text"), dir_skip]],
             [[lang._text(self._, "cancel.key.text"), dir_cancel]],
         ])
-
-    class Profile(object):
-        _ = "profile"
 
 
         

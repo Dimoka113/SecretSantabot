@@ -23,7 +23,7 @@ async def cancel_create_room(origin: Client, data: types.CallbackQuery):
 
 @bot.on_callback_query(lambda orig, data: is_create_room(data))
 async def create_room(origin: Client, data: types.CallbackQuery):
-    users.set_add_user_status()
+    users.set_add_user_status(data.from_user.id, "create_room")
     await data.message.edit_text(
         text=lang._text("newroom.name"), 
         reply_markup=Keybords.get_cancel("cancel.create_room")

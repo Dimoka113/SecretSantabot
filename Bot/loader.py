@@ -3,7 +3,7 @@ from pyrogram import Client
 from Defs.logger import Logger
 from Defs.datastore import Rooms, Users
 from Defs.lang import Lang
-from Data.config import workers, max_concurrent_transmissions, no_updates
+from Data.config import workers, max_concurrent_transmissions
 
 Logger.level("INFO")
 log = Logger(name="Main")

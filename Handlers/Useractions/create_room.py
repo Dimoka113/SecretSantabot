@@ -7,21 +7,22 @@ import random
 
 def is_set_name_create_room(msg: types.Message):
     if msg.from_user:
-        status = users.get_user_status(msg.from_user.id)
+        status = users.get_messagedata_type(msg.from_user.id)
         if status:
-            if status[0][0] == "create_room":
+            if status == "create_room":
                 return True
 
     return False
 
 def is_set_user_limit_create_room(msg: types.Message):
     if msg.from_user:
-        status = users.get_user_status(msg.from_user.id)
+        status = users.get_messagedata_type(msg.from_user.id)
         if status:
-            if status[0][0] == "create_room":
-                if len(status[0]) == 2: 
-                    return True
-
+            if status == "create_room":
+                # if len(status["userdata"]) == 2: 
+                #     return True
+                pass
+            
     return False
 
 

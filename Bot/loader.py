@@ -1,15 +1,16 @@
 from Bot.keys import API_ID, API_HASH, TOKEN
 from pyrogram import Client
-from Defs.logger import Logger
 from Defs.datastore import Rooms, Users
 from Defs.lang import Lang
 from Data.config import workers, max_concurrent_transmissions
+from Defs.logger import Logger
 
-Logger.level("INFO")
+
 log = Logger(name="Main")
+log.level(Logger.types.INFO)
 
-rooms = Rooms("Data/rooms.json")
-users = Users("Data/users.json")
+rooms = Rooms("Data/data.rooms.json")
+users = Users("Data/data.users.json")
 lang = Lang("Data/Langs", "ru")
 
 bot = Client(

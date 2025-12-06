@@ -3,16 +3,16 @@
         "name": "Name",
         "rule": "12341",
         "peer_limit": 113,
-        "date_created": "Дата",
-        "date_intited": "Дата",
-        "date_roll": "Дата",
-        "date_limit": "Дата",
+        "date_created": "Date",
+        "date_intited": "Date",
+        "date_roll": "Date",
+        "date_limit": "Date",
         "admin": [123, true],
         "coadmins": [
             [123, true],
             [3123, true]
         ],
-        "users": []
+        "users": [113,321]
     }
 
 }

@@ -138,22 +138,21 @@ class Users(Gateway):
         data[str(user_id)]["status"]["userdata"] = []
         return self.white(data)
 
-    def add_user(self, user_id: int, name: str, age: int, wishlist: str, bio: str, soc_networks: str):
+    def add_user(self, user_id: int, name: str, age: int, bio: str, wishlist: str, soc_networks: str):
         data = self.read()
-        data[str(user_id)] = {
-            "Name": name, 
-            "Age": age, 
-            "Bio": bio, 
-            "Soc_Nets": soc_networks,
-            "Wishlist": wishlist, 
-        }
+        data[str(user_id)]["Name"] = name
+        data[str(user_id)]["Age"] = age
+        data[str(user_id)]["Bio"] = bio
+        data[str(user_id)]["Wishlist"] = wishlist
+        data[str(user_id)]["Soc_Nets"] = soc_networks
+
         return self.white(data)
 
-    def get_user_by_id(self, user_id: int) -> str:
-        return self.read()[user_id]
+    def get_user_by_id(self, user_id: int) -> dict:
+        return self.read()[str(user_id)]
 
     def get_username_by_id(self, user_id: int) -> str:
-        return self.read()[user_id]["Name"]
+        return self.read()[str(user_id)]["Name"]
     
     def delete_user(self, user_id: int):
         data = self.read()

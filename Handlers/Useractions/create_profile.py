@@ -1,4 +1,4 @@
-from Bot.loader import bot, lang, rooms, users
+from Bot.loader import bot, lang, rooms, users, log
 from Data import config
 from pyrogram import Client, types, filters
 from Consts.keyboards import Keybords
@@ -13,15 +13,27 @@ def is_set_name_user_profile(msg: types.Message):
 
     return False
 
+def is_set_name_user_profile(msg: types.Message):
+    if msg.from_user:
+        status = users.get_messagedata_type(msg.from_user.id)
+        if status == "create_profile":
+            return True
+
+    return False
+
 @bot.on_message(lambda orig, msg: is_set_name_user_profile(msg))
 async def set_name_create_room(origin: Client, msg: types.Message):
     user_id = msg.from_user.id
-    chat_id, message_id = users.get_messagedata_status(user_id)
-    users.add_userdata_status(user_id, msg.text)
     status = users.get_user_status_userdata(user_id)
 
-    print(status)
-    if len(status) == 1:
+    if len(status) < 5:
+        users.add_userdata_status(user_id, msg.text)
+    else:
+        return False
+    
+    chat_id, message_id = users.get_messagedata_status(user_id)
+    log.debug(status)
+    if len(status) == 0:
         await bot.edit_message_text(
             chat_id=chat_id,
             message_id=message_id,
@@ -34,7 +46,7 @@ async def set_name_create_room(origin: Client, msg: types.Message):
                 dir_skip="skip.profile.age"
                 )
             )
-    elif len(status) == 2:
+    elif len(status) == 1:
         await bot.edit_message_text(
             chat_id=chat_id,
             message_id=message_id,
@@ -47,7 +59,7 @@ async def set_name_create_room(origin: Client, msg: types.Message):
                 dir_skip="skip.profile.age"
                 )
             )
-    elif len(status) == 3:
+    elif len(status) == 2:
         await bot.edit_message_text(
             chat_id=chat_id,
             message_id=message_id,
@@ -60,7 +72,7 @@ async def set_name_create_room(origin: Client, msg: types.Message):
                 dir_skip="skip.profile.wishlist"
                 )
             )
-    elif len(status) == 4:
+    elif len(status) == 3:
         await bot.edit_message_text(
             chat_id=chat_id,
             message_id=message_id,
@@ -68,30 +80,49 @@ async def set_name_create_room(origin: Client, msg: types.Message):
             )
         
         new_message = await msg.reply(
-            text="И последнее, укажите ваши соц сети, чтобы другие игроки знали, как в случае чего с вами связаться\nПример: \"SecretSanta https://t.me/Secret113Santabot\"\n(Вы можете указать сразу несколько соц сетей используйте перенос строки)",
+            text="И последнее, укажите ваши соц сети, чтобы другие игроки знали, как в случае чего с вами связаться",
             reply_markup=Keybords.get_skip(
-                dir_skip="skip.profile.wishlist"
+                dir_skip="skip.profile.SocNets"
                 )
             )
 
 
-    elif len(status) == 5:
-        media = []
-        for link in msg.text.split("\n"):
-            info = link.split()
-            media.append([[info[0], info[1]]])
-
+    elif len(status) == 4:
         await bot.edit_message_text(
             chat_id=chat_id,
             message_id=message_id,
-            text="Вот ваши ссылки:",
-            reply_markup=create_keybord_links(media)
+            text="Вот ваши ссылки:\n{link}".format(link=msg.text),
             )
-        
+        userdata = users.get_user_status_userdata(msg.from_user.id)
+        log.debug(userdata)
         # ... Добавить сюда функцию, которая вызовет сообщение, такое-же, как для кнопки "Ваш профиль"
         new_message = await msg.reply(
-            text="Профиль сформирован!\nПроверьте себя! Если вас всё устраивает, нажмите на кнопку сохранить",
-            reply_markup=Keybords.keys_predone_profile()
-            )
+            text="""
+Профиль сформирован!
+————————
+Псевдоним: {name}
+————————
+Возраст: {age}
+————————
+О себе: 
+{bio}
+————————
+Ваши пожелания: 
+{wishlist}
+————————
+Ваши ссылки: 
+{links}
+————————
+Проверьте себя: Если вас всё устраивает, нажмите на кнопку сохранить
+""".format(
+    name=userdata[0] if userdata[0] else lang._text("data.null"), 
+    age=userdata[1] if userdata[1] else lang._text("data.null"), 
+    bio=userdata[2] if userdata[2] else lang._text("data.null"), 
+    wishlist=userdata[3] if userdata[3] else lang._text("data.null"), 
+    links=userdata[4] if userdata[4] else lang._text("data.null"), 
+    ),
+reply_markup=Keybords.keys_predone_profile())
+
+
 
     users.update_messagedata_status(user_id, new_message.chat.id, new_message.id)

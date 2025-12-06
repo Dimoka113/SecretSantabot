@@ -1,4 +1,5 @@
 from . import (
     create_room, 
-    create_profile
+    create_profile,
+    open_profile
 )

@@ -7,7 +7,7 @@ from Defs.logger import Logger
 
 
 log = Logger(name="Main")
-log.level(Logger.types.INFO)
+log.level(Logger.types.DEBUG)
 
 rooms = Rooms("Data/data.rooms.json")
 users = Users("Data/data.users.json")

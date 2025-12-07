@@ -45,7 +45,7 @@ reply_markup=Keybords.keys_open_profile("start.main")
 )
 
 
-@bot.on_callback_query(lambda orig, data: is_back_profile(data))
+@bot.on_callback_query(lambda orig, data: is_edit_profile(data))
 async def back_profile(origin: Client, data: types.CallbackQuery):
     await data.edit_message_text(
         text=lang._text("start_message"), 

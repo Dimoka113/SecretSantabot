@@ -102,11 +102,11 @@ class Users(Gateway):
         else:
             return None
         
-    def get_messagedata_status(self, user_id: int) -> bool:
+    def get_messagedata_status(self, user_id: int) -> list:
         data = self.read()
         return data[str(user_id)]["status"]["messagedata"]
     
-    def get_messagedata_type(self, user_id: int) -> bool:
+    def get_messagedata_type(self, user_id: int) -> str:
         data = self.read()
         return data[str(user_id)]["status"]["type"]
     

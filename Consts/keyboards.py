@@ -73,7 +73,7 @@ class Keybords(object):
     def get_skip_and_cancel(self, dir_cancel: str, dir_skip: str) -> types.InlineKeyboardMarkup:  
         return create_keybord(
         [
-            [[lang._text(self._, "back.key.text"), dir_skip]],
+            [[lang._text(self._, "skip.key.text"), dir_skip]],
             [[lang._text(self._, "cancel.key.text"), dir_cancel]],
         ])
 

@@ -41,7 +41,7 @@ class Rooms(Gateway):
     name: str, 
     admin_data: list,
     peer_limit: int, 
-    rule: int,   # Условие обмена
+    rule: str,   # Условие обмена
     date_created: datetime, # Время, когда комната была создана
     date_intited: datetime, # Время, когда больше нельзя будет заходить в комнату, и её настраивать
     date_roll: datetime,    # Время, когда запуститься жеребьёвка
@@ -56,7 +56,6 @@ class Rooms(Gateway):
         "date_created": date_created,
         "date_intited": date_intited,
         "date_roll": date_roll,
-        "date_limit": date_limit,
         }
         return self.white(data)
         # ...

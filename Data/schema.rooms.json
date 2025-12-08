@@ -6,7 +6,6 @@
         "date_created": "Date",
         "date_intited": "Date",
         "date_roll": "Date",
-        "date_limit": "Date",
         "admin": [123, true],
         "coadmins": [
             [123, true],

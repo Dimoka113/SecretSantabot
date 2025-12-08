@@ -1,6 +1,7 @@
 from Defs.keyboard import create_keybord
 from Bot.loader import lang
 from pyrogram import types
+from datetime import datetime, timedelta
 
 class Keybords(object):
     _ = "keybords"
@@ -77,6 +78,15 @@ class Keybords(object):
             [[lang._text(self._, "cancel.key.text"), dir_cancel]],
         ])
 
+    @classmethod
+    def get_datetime_keys_and_cancel(self, dir_cancel: str, datenow: datetime, daysformats: list[int]) -> types.InlineKeyboardMarkup: 
+        keys = []
+        for date in daysformats:
+            dateform = datenow + timedelta(days=date)
+            keys.append([[dateform, f"dateroom_{'-'.join(str(date).split())}"]])
 
-        
+
+        keys.append([[lang._text(self._, "cancel.key.text"), dir_cancel]])
+        return create_keybord(keys)
+    
 

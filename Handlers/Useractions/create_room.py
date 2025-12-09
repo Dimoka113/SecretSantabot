@@ -4,6 +4,8 @@ from pyrogram import Client, types, filters
 from Consts.keyboards import Keybords
 import random
 from datetime import datetime
+from Defs.date_to_text import *
+
 
 def is_set_create_room(msg: types.Message):
     if msg.from_user:
@@ -21,7 +23,7 @@ async def set_create_room(origin: Client, msg: types.Message):
     user_id = msg.from_user.id
     messagedata = users.get_messagedata_status(user_id)
     status = users.get_messagedata_type(user_id)
-    users.add_userdata_status(user_id, text)
+    userdata = users.get_user_status_userdata(user_id)
 
     if status == "create_room.name":
         newstatus = "create_room.peer_limit"
@@ -46,7 +48,7 @@ async def set_create_room(origin: Client, msg: types.Message):
     elif status == "create_room.rules":
         newstatus = "create_room.date_roll"
         new_text = lang._text("newroom.date_roll")
-        edit_text = lang._text("newroom.date_roll").format(text=text)
+        edit_text = lang._text("newroom.rules.done").format(text=text)
         reply_markup = Keybords.get_datetime_keys_and_cancel(
             dir_cancel="cancel.create_room",
             datenow=datetime.now(),
@@ -55,8 +57,23 @@ async def set_create_room(origin: Client, msg: types.Message):
 
     elif status == "create_room.date_roll":
         newstatus = ""
-        edit_text = "Вы указали:\n" + msg.text
-        new_text = lang._text("newroom.create_done")
+        date_roll = date_text(text, lang._text('months'))
+        try:
+            edit_text = f"Вы указали такую дату:\n{date_roll}"
+        except:
+            await msg.reply("Такой формат даты не поддерживается!\nПример даты: (Пример: `31.12.2025 00:30`)")
+            return False
+        room_id = rooms.get_random_id()
+        reply_markup = Keybords.get_panel_room(room_id, "admin")
+
+        new_text = lang._text("newroom.create_done").format(
+            name=userdata[0],
+            link=f"https://t.me/Secret113Santabot?start={room_id}",
+            limit=userdata[1],
+            rules=userdata[2],
+            date_roll=date_roll
+            )
+
 
     await bot.edit_message_text(
         chat_id=messagedata[0],
@@ -69,18 +86,21 @@ async def set_create_room(origin: Client, msg: types.Message):
         reply_markup=reply_markup
         )
         
+    users.add_userdata_status(user_id, text)
     if newstatus:
         users.set_userdata_status_type(user_id, newstatus)
         users.update_messagedata_status(user_id, new_message.chat.id, new_message.id)
     else:
-        users.set_clear_user_status(user_id)
         userdata = users.get_user_status_userdata(user_id)
         rooms.create_room(
+            id = room_id,
             name=userdata[0],
             admin_data=[user_id, True],
             peer_limit=userdata[1],
             rule=userdata[2],
-            date_created=datetime.now(),
+            date_created=str(datetime.now()),
             date_intited=userdata[3],
             date_roll=userdata[3]
         )
+
+        users.set_clear_user_status(user_id)

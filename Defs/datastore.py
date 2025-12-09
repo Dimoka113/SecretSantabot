@@ -33,11 +33,13 @@ If unsuccessful, outputs a log with `WARN` and returns `False`.
 
 
 class Rooms(Gateway):
+    get_random_id = staticmethod(get_random_id)
     def __init__(self, path): 
         super().__init__(path)
     
 
     def create_room(self, 
+    id: str,
     name: str, 
     admin_data: list,
     peer_limit: int, 
@@ -45,17 +47,19 @@ class Rooms(Gateway):
     date_created: datetime, # Время, когда комната была создана
     date_intited: datetime, # Время, когда больше нельзя будет заходить в комнату, и её настраивать
     date_roll: datetime,    # Время, когда запуститься жеребьёвка
-    date_limit: datetime    # Время, сколько будет существовать комната
                     ):
         data = self.read()
-        data[get_random_id()] = {
+        data[id] = {
         "name": name,
         "admin": admin_data,
         "rule": rule,
-        "peer_limit": peer_limit,
+        "is_open": True,
+        "peer_limit": int(peer_limit),
         "date_created": date_created,
         "date_intited": date_intited,
         "date_roll": date_roll,
+        "coadmins": [],
+        "users": [],
         }
         return self.white(data)
         # ...

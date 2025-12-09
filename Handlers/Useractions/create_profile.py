@@ -95,7 +95,6 @@ async def set_name_create_room(origin: Client, msg: types.Message):
             )
         userdata = users.get_user_status_userdata(msg.from_user.id)
         log.debug(userdata)
-        # ... Добавить сюда функцию, которая вызовет сообщение, такое-же, как для кнопки "Ваш профиль"
         new_message = await msg.reply(
             text="""
 Профиль сформирован!

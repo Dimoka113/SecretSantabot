@@ -83,10 +83,25 @@ class Keybords(object):
         keys = []
         for date in daysformats:
             dateform = datenow + timedelta(days=date)
-            keys.append([[dateform, f"dateroom_{'-'.join(str(date).split())}"]])
+            keys.append([[dateform, f"createroom.date_roll.{date}"]])
 
 
         keys.append([[lang._text(self._, "cancel.key.text"), dir_cancel]])
         return create_keybord(keys)
     
+    
+    @classmethod
+    def get_panel_room(self, room_id: str, user_perm: str):
+        """
+        user_perm: ["participant", "comadmin", "admin"]
+        """
 
+        if user_perm == "admin":
+            return create_keybord(
+            [
+                [[lang._text(self._, "rooms", "list_users"), f"listusers_{room_id}"]],
+                [[lang._text(self._, "rooms", "list_pairs"), f"listpairs_{room_id}"]],
+                [[lang._text(self._, "rooms", "start_action"), f"startaction_{room_id}"]],
+                [[lang._text(self._, "rooms", "user_data"), f"userdata_{room_id}"]],
+                [[lang._text(self._, "rooms", "gift_user"), f"giftuser_{room_id}"]],
+            ])

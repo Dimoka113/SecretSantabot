@@ -15,9 +15,9 @@ def get_random_id():
         return ''.join(reversed(out))
 
     def make_custom_timestamp_id(dt: datetime.datetime) -> int:
-        time = dt.strftime("%Y%m%d%H%M%S%f")
-        tail = random.randint(0, 10000) 
+        time = dt.strftime("%S%m%d%H%M%Y")
         ram = psutil.virtual_memory().used
-        return int(f"{time}{ram}{tail}")
+        tail = random.randint(0, ram) 
+        return int(f"{time}{tail}")
 
     return to_base62(make_custom_timestamp_id(datetime.datetime.now()))

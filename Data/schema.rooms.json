@@ -1,18 +1,37 @@
 {
-    "room_id": {
-        "name": "Name",
-        "rule": "12341",
-        "is_open": true,
-        "peer_limit": 113,
-        "date_created": "Date",
-        "date_intited": "Date",
-        "date_roll": "Date",
-        "admin": [123, true],
-        "coadmins": [
-            [123, true],
-            [3123, true]
-        ],
-        "users": [{"123":{}}]
-    }
+   "room_id": {
+      "name": "Name",
+      "admin": [
+         123, 
+         true
+      ],
+      "rule": "12341",
+      "is_open": true,
+      "peer_limit": 113,
+      "date_created": "Date",
+      "date_intited": "Date",
+      "date_roll": "Date",
+      "coadmins": [
+         [
+            123, 
+            true
+         ]
+      ],
+      "users": {
+         "0":{      
+               "Name": "Dimoka113",
+               "Age": "19",
+               "Bio": "Some description of me",
+               "Wishlist": "Idk",
+               "Soc_Nets": ""
+         }
+      },
+      "roll": {
+         "0": 3,
+         "3": 1,
+         "1": 0
+      }
+
+   }
 
 }

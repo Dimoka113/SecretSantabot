@@ -59,6 +59,21 @@ class Keybords(object):
         ])
     
     @classmethod
+    def keys_room_change_data(self, data: list) -> types.InlineKeyboardMarkup: 
+        save = lang._text("emoji_save")
+        change = lang._text("emoji_change")
+
+        return create_keybord(
+        [
+            [[lang._text(self._, "profile.predone.change_name") + (save if data[0] else change), "joinroom.manually.change_name"]],
+            [[lang._text(self._, "profile.predone.change_age") + (save if data[1] else change), "joinroom.manually.change_age"]],
+            [[lang._text(self._, "profile.predone.change_bio") + (save if data[2] else change), "joinroom.manually.change_bio"]],
+            [[lang._text(self._, "profile.predone.change_wishlist") + (save if data[3] else change), "joinroom.manually.change_wishlist"]],
+            [[lang._text(self._, "profile.predone.change_netlinks") + (save if data[4] else change), "joinroom.manually.change_netlinks"]],
+            [[lang._text(self._, "room_join_select_done"), "joinroom.manually.done"]],
+        ])
+
+    @classmethod
     def keys_open_profile(self, dir_cancel: str) -> types.InlineKeyboardMarkup: 
         return create_keybord(
         [
@@ -91,9 +106,17 @@ class Keybords(object):
     
     
     @classmethod
+    def get_key_open_panel_room(self, room_id: str, user_perm: str):
+        return create_keybord(
+        [
+            [[lang._text(self._, "open.settings_room"), f"settings_room_{room_id}"]],
+        ])
+    
+    @classmethod
     def get_panel_room(self, room_id: str, user_perm: str):
         """
-        user_perm: ["participant", "comadmin", "admin"]
+        #### `user_perm` can be: 
+        ```["participant", "comadmin", "admin"]
         """
 
         if user_perm == "admin":
@@ -105,3 +128,16 @@ class Keybords(object):
                 [[lang._text(self._, "rooms", "user_data"), f"userdata_{room_id}"]],
                 [[lang._text(self._, "rooms", "gift_user"), f"giftuser_{room_id}"]],
             ])
+        
+        else:
+            raise Exception("Do not support!")
+        
+    @classmethod
+    def join_room_user_keys(self, room_id: str) -> types.InlineKeyboardMarkup:  
+        return create_keybord(
+        [
+            [[lang._text(self._, "user.join_room.copy_profile"), f"joinroom.copy_{room_id}"]],
+            [[lang._text(self._, "user.join_room.manually_data"), f"joinroom.manually_{room_id}"]],
+            [[lang._text(self._, "cancel.key.text"), f"joinroom.cancel_{room_id}"]],
+        ])
+

@@ -59,21 +59,27 @@ class Rooms(Gateway):
         "date_intited": date_intited,
         "date_roll": date_roll,
         "coadmins": [],
-        "users": [],
+        "users": {},
+        "roll": {},
         }
         return self.white(data)
         # ...
 
-    def add_user_in_room(self, room_id: str, user_id: int) -> bool:
+    def add_user_in_room(self, room_id: str, user_data: dict) -> bool:
         data = self.read()
-        data[room_id]["users"].append(user_id)
+        data[room_id]["users"].update(user_data)
+        return self.white(data)
+
+    def delete_user_in_room(self, room_id: str, user_id: int|str) -> bool:
+        data = self.read()
+        del data[room_id]["users"][str(user_id)]
         return self.white(data)
 
     def get_roomname_by_id(self, room_id: str) -> str:
         return self.read()[room_id]["name"]
     
-    def get_admins_by_id(self, room_id: str) -> str:
-        return self.read()[room_id]["admin"]
+    def get_admins_by_id(self, room_id: str) -> int:
+        return int(self.read()[room_id]["admin"][0])
 
     def get_rooms(self):
         return [i for i in self.read()]
@@ -83,9 +89,9 @@ class Rooms(Gateway):
         del data[room_id]
         return self.white(data)
     
-    def get_users_room_by_user_id(user_id: int):
-        # ...
-        return []
+    def get_users_room_by_room_id(self, room_id: str):
+        data = self.read()
+        return [int(i) for i in data[room_id]["users"]]
 
 class Users(Gateway):
     def __init__(self, path): 
@@ -132,6 +138,11 @@ class Users(Gateway):
         data = self.read()
         data[str(user_id)]["status"]["userdata"].append(status)
         return self.white(data)
+    
+    def set_userdata_status(self, user_id: int, status: list) -> bool:
+        data = self.read()
+        data[str(user_id)]["status"]["userdata"] = status
+        return self.white(data)
 
     def set_clear_user_status(self, user_id: int) -> bool:
         data = self.read()
@@ -153,6 +164,19 @@ class Users(Gateway):
 
     def get_user_by_id(self, user_id: int) -> dict:
         return self.read()[str(user_id)]
+
+    def get_data_user_by_id(self, user_id: int) -> dict:
+        data = self.read()[str(user_id)]
+        return {
+            str(user_id): {
+                "Name": data["Name"],
+                "Age": data["Age"],
+                "Bio": data["Bio"],
+                "Wishlist": data["Wishlist"],
+                "Soc_Nets": data["Soc_Nets"]
+            }
+        }
+    
 
     def get_username_by_id(self, user_id: int) -> str:
         return self.read()[str(user_id)]["Name"]

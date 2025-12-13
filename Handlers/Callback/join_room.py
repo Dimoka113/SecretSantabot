@@ -1,4 +1,4 @@
-from Bot.loader import bot, lang, users, rooms
+from Bot.loader import bot, lang, users, rooms, log
 from Data import config
 from pyrogram import Client, types, filters
 from Consts.keyboards import Keybords
@@ -42,17 +42,21 @@ async def join_manually_room_data(origin: Client, data: types.CallbackQuery):
         userdata[2] = data_user["Bio"] if userdata[2] else False
         userdata[3] = data_user["Wishlist"] if userdata[3] else False
         userdata[4] = data_user["Soc_Nets"] if userdata[4] else False
+
+        log.debug(userdata)
         users.set_userdata_status(user_id, userdata)
 
         room_id = users.get_messagedata_type(data.from_user.id).split("_")[1]
+
         new_text = (
-        "Вот что будет скопировано из профиля:\n" +
-        f'Имя: {data_user["Name"]}\n' if userdata[0] else "" + 
-        f'Возраст: {data_user["Age"]}\n' if userdata[0] else "" +
-        f'Описание:\n{data_user["Bio"]}\n' if userdata[0] else "" +
-        f'Пожаления:\n{data_user["Wishlist"]}\n' if userdata[0] else "" +
-        f'Ссылки: \n{data_user["Soc_Nets"]}\n' if userdata[0] else ""
+            "Вот что будет скопировано из профиля:\n"
+            + (f'Имя: {data_user["Name"]}\n'            if userdata[0] else "")
+            + (f'Возраст: {data_user["Age"]}\n'         if userdata[1] else "")
+            + (f'Описание:\n{data_user["Bio"]}\n'       if userdata[2] else "")
+            + (f'Пожаления:\n{data_user["Wishlist"]}\n' if userdata[3] else "")
+            + (f'Ссылки:\n{data_user["Soc_Nets"]}\n'    if userdata[4] else "")
         )
+        
         await data.message.edit_text(new_text)
 
         if not userdata[0]:
@@ -67,6 +71,7 @@ async def join_manually_room_data(origin: Client, data: types.CallbackQuery):
             new = "ссылки"  
         else:
             await data.message.reply("Так как вы выбрали всё, профиль был просто скопирован!")
+            rooms.add_user_in_room(room_id, users.get_data_user_by_id(data.from_user.id))
             return True
         message = await data.message.reply(f"Теперь укажите {new}, и оно будет использоваться в этой комнате")
         users.update_messagedata_status(user_id, message.chat.id, message.id)
@@ -93,6 +98,8 @@ async def join_room_data(origin: Client, data: types.CallbackQuery):
     if userdata[0] == "copy":
         edit_text = "Данные успешно скопированы из вашего профиля!"
         rooms.add_user_in_room(userdata[1], users.get_data_user_by_id(data.from_user.id))
+        users.add_user_in_room(userdata[1], data.from_user.id)
+
         await data.message.edit_text(edit_text)
         
     elif userdata[0] == "manually":

@@ -8,7 +8,10 @@ async def start_command(origin: Client, msg: types.Message):
     user_id = msg.from_user.id
     if len(msg.text.split()) == 1:
         if users.is_users_exist(user_id):
-            await msg.reply(text=lang._text("start_message"), reply_markup=Keybords.get_start_no_room())
+            if len(users.get_user_rooms(user_id)) != 0:
+                await msg.reply(text=lang._text("start_message"), reply_markup=Keybords.get_start_all())
+            else:
+                await msg.reply(text=lang._text("start_message"), reply_markup=Keybords.get_start_no_room())
         else:
             await msg.reply(text=lang._text("start_message_noprofile"), reply_markup=Keybords.create_profile())
 

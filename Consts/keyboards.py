@@ -100,17 +100,18 @@ class Keybords(object):
             dateform = datenow + timedelta(days=date)
             keys.append([[dateform, f"createroom.date_roll.{date}"]])
 
-
-        keys.append([[lang._text(self._, "cancel.key.text"), dir_cancel]])
         return create_keybord(keys)
     
     
     @classmethod
-    def get_key_open_panel_room(self, room_id: str, user_perm: str):
-        return create_keybord(
-        [
-            [[lang._text(self._, "open.settings_room"), f"settings_room_{room_id}"]],
-        ])
+    def get_list_rooms(self, room_ids: list[list[str]]) -> types.InlineKeyboardMarkup: 
+        i = [
+                [[i[1], f"openroom_{i[0]}"]] for i in room_ids
+            ]
+        i.append([[lang._text(self._, "back.key.text"), "start"]]) 
+        return create_keybord(i)
+
+
     
     @classmethod
     def get_panel_room(self, room_id: str, user_perm: str):
@@ -127,6 +128,7 @@ class Keybords(object):
                 [[lang._text(self._, "rooms", "start_action"), f"startaction_{room_id}"]],
                 [[lang._text(self._, "rooms", "user_data"), f"userdata_{room_id}"]],
                 [[lang._text(self._, "rooms", "gift_user"), f"giftuser_{room_id}"]],
+                [[lang._text(self._, "open.settings_room"), f"settingsroom_{room_id}"]],
             ])
         
         else:
@@ -139,5 +141,15 @@ class Keybords(object):
             [[lang._text(self._, "user.join_room.copy_profile"), f"joinroom.copy_{room_id}"]],
             [[lang._text(self._, "user.join_room.manually_data"), f"joinroom.manually_{room_id}"]],
             [[lang._text(self._, "cancel.key.text"), f"joinroom.cancel_{room_id}"]],
+        ])
+
+    @classmethod
+    def admin_is_roll(self, room_id: str) -> types.InlineKeyboardMarkup:  
+        return create_keybord(
+        [
+            [
+                [lang._text("emoji_yes"), f"adminroll_yes_{room_id}"],
+                [lang._text("emoji_no"), f"adminroll_no_{room_id}"]
+            ],
         ])
 

@@ -17,14 +17,14 @@ async def selecttype_user_changedata_joinroom(
     userdata = users.get_user_status_userdata(msg.from_user.id)
     old_msg = users.get_messagedata_status(msg.from_user.id)
     
+
     if userdata[0] == False: userdata[0] = msg.text; new = "возраст"
-    elif userdata[1] == False: userdata[1] = msg.text; new = "описание"
-    elif userdata[2] == False: userdata[2] = msg.text; new = "пожелание"
-    elif userdata[3] == False: userdata[3] = msg.text; new = "ссылки"
-    elif userdata[4] == False: userdata[4] = msg.text; new = ""
-
-    users.set_userdata_status(msg.from_user.id, userdata)
-
+    if userdata[1] == False: userdata[1] = msg.text; new = "описание"
+    if userdata[2] == False: userdata[2] = msg.text; new = "пожелание"
+    if userdata[3] == False: userdata[3] = msg.text; new = "ссылки"
+    if userdata[4] == False: userdata[4] = msg.text; new = ""
+    else: new = ""
+    
     await bot.edit_message_text(chat_id=old_msg[0],
                           message_id=old_msg[1],
                           text=f"Вы указали: {msg.text}"
@@ -45,5 +45,7 @@ async def selecttype_user_changedata_joinroom(
             }
         room_id = users.get_messagedata_type(msg.from_user.id).split("_")[1]
         rooms.add_user_in_room(room_id, new_data_user)
+        users.add_user_in_room(room_id, msg.from_user.id)      
+
         users.set_clear_user_status(msg.from_user.id)
         await msg.reply("Новый профиль успешно сохранён!")

@@ -1,22 +1,14 @@
 {
    "room_id": {
       "name": "Name",
-      "admin": [
-         123, 
-         true
-      ],
+      "admin": 123,
       "rule": "12341",
       "is_open": true,
       "peer_limit": 113,
       "date_created": "Date",
       "date_intited": "Date",
       "date_roll": "Date",
-      "coadmins": [
-         [
-            123, 
-            true
-         ]
-      ],
+      "coadmins": [123, 321],
       "users": {
          "0":{      
                "Name": "Dimoka113",

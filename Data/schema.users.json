@@ -1,11 +1,12 @@
 {
    "0": {
       "status": {
-         "type": "",
+         "type": "str",
          "origin": "room_id",
-         "messagedata": [],
-         "userdata": []
+         "messagedata": [1,0],
+         "userdata": ["list[str]|list[bool]"]
       },
+      "rooms": [],
       "Name": "Dimoka113",
       "Age": "19",
       "Bio": "Some description of me",

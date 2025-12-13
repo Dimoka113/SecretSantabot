@@ -1,0 +1,25 @@
+from Bot.loader import bot, lang, users
+from Data import config
+from pyrogram import Client, types, filters
+from Consts.keyboards import Keybords
+
+
+def is_admin_roll(data: types.CallbackQuery):
+# [[lang._text(self._, "emoji_yes"), f"adminroll_yes_{room_id}"]],
+# [[lang._text(self._, "emoji_no"), f"adminroll_no_{room_id}"]],
+    if data.data.split("_")[0] ==  "adminroll":
+        return True
+    return False
+
+@bot.on_callback_query(lambda orig, data: is_admin_roll(data))
+async def admin_roll(orig: Client, data: types.CallbackQuery):
+    _, calldata, room_id  = tuple(data.data.split("_"))
+
+    if calldata == "yes":
+        await data.message.edit_text(
+            text="Хорошо, выберите указать ваши данные из вашего профиля, или указать вручную:",                    
+            reply_markup=Keybords.join_room_user_keys(room_id=room_id)
+        )
+
+    else:
+        await data.message.edit_text("Хорошо, вы не будете учитываться в жеребьёвке")

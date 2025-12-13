@@ -41,7 +41,7 @@ class Rooms(Gateway):
     def create_room(self, 
     id: str,
     name: str, 
-    admin_data: list,
+    admin_data: int,
     peer_limit: int, 
     rule: str,   # Условие обмена
     date_created: datetime, # Время, когда комната была создана
@@ -54,7 +54,7 @@ class Rooms(Gateway):
         "admin": admin_data,
         "rule": rule,
         "is_open": True,
-        "peer_limit": int(peer_limit),
+        "peer_limit": int(peer_limit) if peer_limit else peer_limit,
         "date_created": date_created,
         "date_intited": date_intited,
         "date_roll": date_roll,
@@ -68,6 +68,7 @@ class Rooms(Gateway):
     def add_user_in_room(self, room_id: str, user_data: dict) -> bool:
         data = self.read()
         data[room_id]["users"].update(user_data)
+
         return self.white(data)
 
     def delete_user_in_room(self, room_id: str, user_id: int|str) -> bool:
@@ -79,9 +80,9 @@ class Rooms(Gateway):
         return self.read()[room_id]["name"]
     
     def get_admins_by_id(self, room_id: str) -> int:
-        return int(self.read()[room_id]["admin"][0])
+        return int(self.read()[room_id]["admin"])
 
-    def get_rooms(self):
+    def get_rooms(self) -> list[str]:
         return [i for i in self.read()]
 
     def delete_room(self, room_id: str) -> bool:
@@ -89,9 +90,16 @@ class Rooms(Gateway):
         del data[room_id]
         return self.white(data)
     
-    def get_users_room_by_room_id(self, room_id: str):
+    def get_users_room_by_room_id(self, room_id: str) -> list:
         data = self.read()
         return [int(i) for i in data[room_id]["users"]]
+    
+    def get_number_users_in_room(self, room_id: str) -> int:
+        return len(self.read()[room_id]["users"])
+    
+    def get_peer_limit_by_room_id(self, room_id: str) -> None|int:
+        return self.read()[room_id]["peer_limit"]
+
 
 class Users(Gateway):
     def __init__(self, path): 
@@ -99,7 +107,7 @@ class Users(Gateway):
 
     def add_zero_user(self, user_id: int):
         data = self.read()
-        data[str(user_id)] = {"status": {"type": "", "origin": "", "messagedata": [], "userdata": []}}
+        data[str(user_id)] = {"status": {"type": "", "origin": "", "messagedata": [], "userdata": []}, "rooms": []}
         return self.white(data)
     
     def is_users_exist(self, user_id: int) -> bool:
@@ -115,10 +123,11 @@ class Users(Gateway):
         data = self.read()
         return data[str(user_id)]["status"]["messagedata"]
     
-    def get_messagedata_type(self, user_id: int) -> str:
+    def get_messagedata_type(self, user_id: int) -> str|None:
         data = self.read()
-        return data[str(user_id)]["status"]["type"]
-    
+        try: return data[str(user_id)]["status"]["type"]
+        except: return None
+        
     def set_status_origin(self, user_id: int, origin: str) -> bool:
         data = self.read()
         data[str(user_id)]["status"]["origin"] = origin
@@ -165,30 +174,41 @@ class Users(Gateway):
     def get_user_by_id(self, user_id: int) -> dict:
         return self.read()[str(user_id)]
 
-    def get_data_user_by_id(self, user_id: int) -> dict:
+    def get_data_user_by_id(self, user_id: int) -> dict|None:
         data = self.read()[str(user_id)]
-        return {
-            str(user_id): {
-                "Name": data["Name"],
-                "Age": data["Age"],
-                "Bio": data["Bio"],
-                "Wishlist": data["Wishlist"],
-                "Soc_Nets": data["Soc_Nets"]
+        try: return {
+                str(user_id): {
+                    "Name": data["Name"],
+                    "Age": data["Age"],
+                    "Bio": data["Bio"],
+                    "Wishlist": data["Wishlist"],
+                    "Soc_Nets": data["Soc_Nets"]
+                }
             }
-        }
-    
+        except:
+            return None
 
-    def get_username_by_id(self, user_id: int) -> str:
-        return self.read()[str(user_id)]["Name"]
-    
+    def get_username_by_id(self, user_id: int) -> str|None:
+        try: return self.read()[str(user_id)]["Name"]
+        except: return None
+        
     def delete_user(self, user_id: int):
         data = self.read()
         del data[str(user_id)]
         return self.white(data)
     
-    def add_user_in_room(self, room_id: int, user_id: int):
+    def get_user_rooms(self, user_id: int):
+        try: return self.read()[str(user_id)]["rooms"]
+        except: return None
+    
+    def add_user_in_room(self, room_id: str, user_id: int):
         data = self.read()
         data[str(user_id)]["rooms"].append(room_id)
+        return self.white(data)
+
+    def remove_user_in_room(self, room_id: str, user_id: int):
+        data = self.read()
+        data[str(user_id)]["rooms"].remove(room_id)
         return self.white(data)
 
 # r = Users("Data/users.json")

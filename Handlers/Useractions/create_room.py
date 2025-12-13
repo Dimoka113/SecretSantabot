@@ -19,6 +19,9 @@ def is_set_create_room(msg: types.Message):
 
 @bot.on_message(lambda orig, msg: is_set_create_room(msg))
 async def set_create_room(origin: Client, msg: types.Message):
+    if not msg.text:
+        return False
+    
     text = msg.text
     user_id = msg.from_user.id
     messagedata = users.get_messagedata_status(user_id)
@@ -92,10 +95,11 @@ async def set_create_room(origin: Client, msg: types.Message):
         users.update_messagedata_status(user_id, new_message.chat.id, new_message.id)
     else:
         userdata = users.get_user_status_userdata(user_id)
+        users.add_user_in_room(room_id, user_id)      
         rooms.create_room(
             id = room_id,
             name=userdata[0],
-            admin_data=[user_id, True],
+            admin_data=user_id,
             peer_limit=userdata[1],
             rule=userdata[2],
             date_created=str(datetime.now()),
@@ -104,3 +108,8 @@ async def set_create_room(origin: Client, msg: types.Message):
         )
 
         users.set_clear_user_status(user_id)
+
+        await msg.reply(
+            text=lang._text("newroom.is_admin_roll"),
+            reply_markup=Keybords.admin_is_roll(room_id)
+            )

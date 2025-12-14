@@ -16,7 +16,7 @@ async def open_profile_by_id(orig: Client, data: types.CallbackQuery):
     for i in users.get_user_rooms(data.from_user.id): 
         name = rooms.get_roomname_by_id(i)
         peer = rooms.get_number_users_in_room(i)
-        peer_limit = rooms.get_peer_limit_by_room_id(i)
+        peer_limit = rooms.get_peer_limit_by_id(i)
         text = text + f'\n{name}: ({peer}/{peer_limit if peer_limit else "∞"})'
         rdata.append([i, name])
 
@@ -37,3 +37,24 @@ def is_open_room(data: types.CallbackQuery):
 async def open_profile_by_id(orig: Client, data: types.CallbackQuery):
     room_id = data.data.split("_")[1]
     
+    if int(data.from_user.id) == int(rooms.get_admins_by_id(room_id)): user_perm = "admin" 
+    else: user_perm = "participant"
+
+
+    await data.message.edit_text(
+        text="""
+<b>Вы открыли комнату</b>: {name}
+<b>Ссылка на комнату</b>: <a href='https://t.me/Secret113Santabot?start={room_id}'>{room_id}</a>
+<b>Лимит участников</b>: {limit}
+<b>Правила комнаты</b>: {rules}
+<b>Дата "Жеребьёвки"</b>: {date}
+""".format(
+    name=rooms.get_roomname_by_id(room_id),
+    room_id=room_id,
+    limit=rooms.get_peer_limit_by_id(room_id),
+    rules=rooms.get_rules_by_id(room_id),
+    date=rooms.get_date_roll_by_id(room_id),
+    ),
+    
+    reply_markup=Keybords.get_panel_room(room_id=room_id, user_perm=user_perm, dir_cancel="start.userrooms")
+    )   

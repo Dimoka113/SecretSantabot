@@ -2,8 +2,4 @@ import random
 
 def roll_users(users: list):
     ran = random.sample(users, len(users))
-    for idx in range(len(ran)):
-        current = ran[idx]
-        next_ = ran[(idx+1) % len(ran)]
-        print(current, ">", next_)
-        
+    return {ran[i]: ran[(i + 1) % len(ran)] for i in range(len(ran))}

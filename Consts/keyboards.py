@@ -114,7 +114,7 @@ class Keybords(object):
 
     
     @classmethod
-    def get_panel_room(self, room_id: str, user_perm: str):
+    def get_panel_room(self, room_id: str, user_perm: str, dir_cancel: str):
         """
         #### `user_perm` can be: 
         ```["participant", "comadmin", "admin"]
@@ -129,6 +129,7 @@ class Keybords(object):
                 [[lang._text(self._, "rooms", "user_data"), f"userdata_{room_id}"]],
                 [[lang._text(self._, "rooms", "gift_user"), f"giftuser_{room_id}"]],
                 [[lang._text(self._, "open.settings_room"), f"settingsroom_{room_id}"]],
+                [[lang._text(self._, "back.key.text"), dir_cancel]],
             ])
         
         else:
@@ -153,3 +154,31 @@ class Keybords(object):
             ],
         ])
 
+
+    @classmethod
+    def get_keys_open_user_profile(self, room_id: str, user_id: str) -> types.InlineKeyboardMarkup:  
+        return create_keybord(
+            [
+                [[lang._text(self._, "open_origin_userprofile"), f"openprofile_{room_id}_{user_id}"]],
+                [[lang._text(self._, "send_gift"), f"sendmessagee_{room_id}_{user_id}"]],
+            ]
+        )
+    
+    @classmethod
+    def get_keys_open_room_profile(self, room_id: str, user_id: str) -> types.InlineKeyboardMarkup:  
+        return create_keybord(
+            [
+                [[lang._text(self._, "open_origin_roombase"), f"openroomprofile_{room_id}_{user_id}"]],
+                [[lang._text(self._, "send_gift"), f"sendmessagee_{room_id}_{user_id}"]],
+            ]
+        )
+        
+    @classmethod
+    def get_list_partient(self, room_id: str) -> types.InlineKeyboardMarkup:  
+        return create_keybord(
+            [
+                [
+                    [lang._text(self._, "open_list_couples"), f"openlistcouples_{room_id}"],
+                ],
+            ]
+        )

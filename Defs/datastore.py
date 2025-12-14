@@ -1,6 +1,8 @@
 import json
 from Defs.random_id import get_random_id
 from datetime import datetime
+from Defs.roll_users import *
+
 
 
 class Gateway(object):
@@ -71,35 +73,58 @@ class Rooms(Gateway):
 
         return self.white(data)
 
+
+    def run_roll_in_room_id(self, room_id: str):
+        data = self.read()
+        
+        data[str(room_id)]["roll"] = roll_users(self.get_users_room_by_room_id(room_id))
+
+        return self.white(data)
+
+    def get_roolled_by_id(self, room_id: str) -> dict:
+        return self.read()[str(room_id)]["roll"]
+    
+
     def delete_user_in_room(self, room_id: str, user_id: int|str) -> bool:
         data = self.read()
         del data[room_id]["users"][str(user_id)]
         return self.white(data)
 
     def get_roomname_by_id(self, room_id: str) -> str:
-        return self.read()[room_id]["name"]
+        return self.read()[str(room_id)]["name"]
+    
+    def get_rules_by_id(self, room_id: str) -> str:
+        return self.read()[str(room_id)]["peer_limit"]
+    
+    def get_peer_limit_by_id(self, room_id: str) -> str:
+        return self.read()[str(room_id)]["peer_limit"]
+    
+    def get_date_roll_by_id(self, room_id: str) -> str:
+        return self.read()[str(room_id)]["date_roll"]
     
     def get_admins_by_id(self, room_id: str) -> int:
-        return int(self.read()[room_id]["admin"])
+        return int(self.read()[str(room_id)]["admin"])
 
     def get_rooms(self) -> list[str]:
         return [i for i in self.read()]
 
     def delete_room(self, room_id: str) -> bool:
         data = self.read()
-        del data[room_id]
+        del data[str(room_id)]
         return self.white(data)
     
     def get_users_room_by_room_id(self, room_id: str) -> list:
         data = self.read()
-        return [int(i) for i in data[room_id]["users"]]
+        return [int(i) for i in data[str(room_id)]["users"]]
     
     def get_number_users_in_room(self, room_id: str) -> int:
-        return len(self.read()[room_id]["users"])
+        return len(self.read()[str(room_id)]["users"])
     
-    def get_peer_limit_by_room_id(self, room_id: str) -> None|int:
-        return self.read()[room_id]["peer_limit"]
-
+    def get_data_user_in_room_id(self, room_id: str, user_id: str, data: str = None) -> dict:
+        if data:
+            return self.read()[str(room_id)]["users"][str(user_id)][data]
+        else:
+            return self.read()[str(room_id)]["users"][str(user_id)]
 
 class Users(Gateway):
     def __init__(self, path): 
@@ -203,8 +228,12 @@ class Users(Gateway):
     
     def add_user_in_room(self, room_id: str, user_id: int):
         data = self.read()
-        data[str(user_id)]["rooms"].append(room_id)
-        return self.white(data)
+        if not room_id in data[str(user_id)]["rooms"]:
+            data[str(user_id)]["rooms"].append(room_id)
+            return self.white(data)
+        else:
+            return False
+        
 
     def remove_user_in_room(self, room_id: str, user_id: int):
         data = self.read()

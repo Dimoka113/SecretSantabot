@@ -1,4 +1,4 @@
-from Bot.loader import bot, lang, users
+from Bot.loader import bot, lang, users, log
 from Data import config
 from pyrogram import Client, types, filters
 from Consts.keyboards import Keybords
@@ -45,16 +45,16 @@ async def edit_predone_profile(origin: Client, data: types.CallbackQuery):
     calldata = data.data.split(".")[2]
     back_keys = Keybords.get_cancel("back.profile.predone")
 
-    if calldata == "change_name":
-        await data.edit_message_text("Хорошо, укажите другой псевдоним", reply_markup=back_keys)
-    elif calldata == "change_age":
-        await data.edit_message_text("Хорошо, укажите другой возраст", reply_markup=back_keys)
-    elif calldata == "change_bio":
-        await data.edit_message_text("Хорошо, укажите другое описание", reply_markup=back_keys)
-    elif calldata == "change_wishlist":
-        await data.edit_message_text("Хорошо, укажите другие ваши предпочтения", reply_markup=back_keys)
-    elif calldata == "change_netlinks":
-        await data.edit_message_text("Хорошо, укажите другие ваши соц сети", reply_markup=back_keys)
+    if calldata == "change_name": text = "Хорошо, укажите другой псевдоним"
+    elif calldata == "change_age": text = "Хорошо, укажите другой возраст"
+    elif calldata == "change_bio": text = "Хорошо, укажите другое описание"
+    elif calldata == "change_wishlist": text = "Хорошо, укажите другие ваши предпочтения"
+    elif calldata == "change_netlinks": text = "Хорошо, укажите другие ваши соц сети"
+    else: log.warn(f"Not suppoted calldata: {calldata} (is_edit_predone_profile)"); return False
+
+    users.update_messagedata_status(data.from_user.id, data.message.chat.id, data.message.id)
+    users.set_userdata_status_type(data.from_user.id, f"create_profile.edit.{calldata}")
+    await data.edit_message_text(text, reply_markup=back_keys)
 
 
 @bot.on_callback_query(lambda orig, data: is_create_profile(data))

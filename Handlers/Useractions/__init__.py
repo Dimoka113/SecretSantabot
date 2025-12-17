@@ -1,5 +1,6 @@
 from . import (
     create_room,
     create_profile,
-    manually_join_room
+    manually_join_room,
+    edit_profile
 )

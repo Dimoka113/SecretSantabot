@@ -9,4 +9,5 @@ from . import (
     join_room, 
     admin_roll,
     back_start,
+    edit_profile
 )

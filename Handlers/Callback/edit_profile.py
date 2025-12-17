@@ -1,4 +1,4 @@
-from Bot.loader import bot, lang, users
+from Bot.loader import bot, lang, users, log
 from Data import config
 from pyrogram import Client, types, filters
 from Consts.keyboards import Keybords
@@ -14,7 +14,7 @@ def is_edit_profile(data: types.CallbackQuery):
 
 
 @bot.on_callback_query(lambda orig, data: is_open_profile(data))
-async def skip_profile_links_calldata(origin: Client, data: types.CallbackQuery):
+async def open_profile_message(origin: Client, data: types.CallbackQuery):
     userdata = users.get_user_by_id(data.from_user.id)
     await data.edit_message_text(
             text="""
@@ -44,10 +44,26 @@ async def skip_profile_links_calldata(origin: Client, data: types.CallbackQuery)
 reply_markup=Keybords.keys_open_profile("start.main")
 )
 
+def is_edit_profile(data: types.CallbackQuery):
+    if "." in data.data: 
+        calldata = data.data.split(".")
+        if len(calldata) == 3:
+            udata = ".".join([calldata[0], calldata[1]])
+            if udata == "profile.edit": return True
+    return False
 
 @bot.on_callback_query(lambda orig, data: is_edit_profile(data))
-async def back_profile(origin: Client, data: types.CallbackQuery):
-    await data.edit_message_text(
-        text=lang._text("start_message"), 
-        reply_markup=Keybords.get_start_no_room()
-    )
+async def edit_profile(origin: Client, data: types.CallbackQuery):
+    calldata = data.data.split(".")[2]
+    back_keys = Keybords.get_cancel("start.userprofile")
+
+    if calldata == "change_name": text = "Хорошо, укажите другой псевдоним"
+    elif calldata == "change_age": text = "Хорошо, укажите другой возраст"
+    elif calldata == "change_bio": text = "Хорошо, укажите другое описание"
+    elif calldata == "change_wishlist": text = "Хорошо, укажите другие ваши предпочтения"
+    elif calldata == "change_netlinks": text = "Хорошо, укажите другие ваши соц сети"
+    else: log.warn(f"Not suppoted calldata: {calldata} (is_edit_profile)"); return False
+
+    users.update_messagedata_status(data.from_user.id, data.message.chat.id, data.message.id)
+    users.set_userdata_status_type(data.from_user.id, f"profile.edit.{calldata}")
+    await data.edit_message_text(text, reply_markup=back_keys)

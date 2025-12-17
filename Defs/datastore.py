@@ -191,6 +191,12 @@ class Users(Gateway):
         data[str(user_id)]["status"]["userdata"] = []
         return self.white(data)
 
+
+    def change_meta_user_by_id(self, user_id: int, datatype: str, new: str):
+        data = self.read()
+        data[str(user_id)][datatype] = new
+        return self.white(data)
+
     def add_user(self, user_id: int, name: str, age: int, bio: str, wishlist: str, soc_networks: str):
         data = self.read()
         data[str(user_id)]["Name"] = name

@@ -17,24 +17,26 @@ def is_back_profile(data: types.CallbackQuery):
 async def open_profile_data(origin: Client, data: types.CallbackQuery):
     userdata = users.get_user_by_id(data.from_user.id)
     await data.edit_message_text(
-            text="""
-Ваш профиль:
-————————
-Псевдоним: {name}
-————————
-Возраст: {age}
-————————
-О себе: 
-{bio}
-————————
-Ваши пожелания: 
-{wishlist}
-————————
-Ваши ссылки: 
-{links}
+#             text="""
+# Ваш профиль:
+# ————————
+# Псевдоним: {name}
+# ————————
+# Возраст: {age}
+# ————————
+# О себе: 
+# {bio}
+# ————————
+# Ваши пожелания: 
+# {wishlist}
+# ————————
+# Ваши ссылки: 
+# {links}
 
-Выберите то, что вы хотите изменить:
-""".format(
+# Выберите то, что вы хотите изменить:
+# """
+            text = lang._text("formating_profile_status","profile")
+.format(
     name=userdata["Name"] if userdata["Name"] else lang._text("data.null"), 
     age=userdata["Age"] if userdata["Age"] else lang._text("data.null"), 
     bio=userdata["Bio"] if userdata["Bio"] else lang._text("data.null"), 

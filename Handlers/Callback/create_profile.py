@@ -45,11 +45,11 @@ async def edit_predone_profile(origin: Client, data: types.CallbackQuery):
     calldata = data.data.split(".")[2]
     back_keys = Keybords.get_cancel("back.profile.predone")
 
-    if calldata == "change_name": text = lang._text("edits", "text.edit.change_name")
-    elif calldata == "change_age": text = "Хорошо, укажите другой возраст"
-    elif calldata == "change_bio": text = "Хорошо, укажите другое описание"
-    elif calldata == "change_wishlist": text = "Хорошо, укажите другие ваши предпочтения"
-    elif calldata == "change_netlinks": text = "Хорошо, укажите другие ваши соц сети"
+    if calldata == "change_name": text = lang._text("formating_profile_status","edit_predone_profile","text.change_name")
+    elif calldata == "change_age": text = lang._text("formating_profile_status","edit_predone_profile","text.change_age")
+    elif calldata == "change_bio": text = lang._text("formating_profile_status","edit_predone_profile","text.change_bio")
+    elif calldata == "change_wishlist": text = lang._text("formating_profile_status","edit_predone_profile","text.change_wishlist")
+    elif calldata == "change_netlinks": text = lang._text("formating_profile_status","edit_predone_profile","text.change_netlinks")
     else: log.warn(f"Not suppoted calldata: {calldata} (is_edit_predone_profile)"); return False
 
     users.update_messagedata_status(data.from_user.id, data.message.chat.id, data.message.id)
@@ -60,7 +60,7 @@ async def edit_predone_profile(origin: Client, data: types.CallbackQuery):
 @bot.on_callback_query(lambda orig, data: is_create_profile(data))
 async def create_profile_calldata(origin: Client, data: types.CallbackQuery):
     users.add_zero_user(data.from_user.id)
-    await data.message.edit_text(text="Хорошо, напишите свой псевдоним")
+    await data.message.edit_text(text=lang._text("formating_profile_status","text.profile.name"))
     users.update_messagedata_status(data.from_user.id, data.message.chat.id, data.message.id)
     users.set_userdata_status_type(data.from_user.id, "create_profile")
 
@@ -68,7 +68,7 @@ async def create_profile_calldata(origin: Client, data: types.CallbackQuery):
 @bot.on_callback_query(lambda orig, data: is_skip_profile_age(data))
 async def skip_profile_age_calldata(origin: Client, data: types.CallbackQuery):
     await data.message.edit_text(
-        text="(Если передумаете, вы всегда можете изменить свой профиль)\nТеперь расскажите немного о себе", 
+        text=lang._text("formating_profile_status","skip_profile_age"), 
         reply_markup=Keybords.get_skip(
             dir_skip="skip.profile.bio"
             )
@@ -80,7 +80,7 @@ async def skip_profile_age_calldata(origin: Client, data: types.CallbackQuery):
 @bot.on_callback_query(lambda orig, data: is_skip_profile_bio(data))
 async def skip_profile_bio_calldata(origin: Client, data: types.CallbackQuery):
     await data.message.edit_text(
-        text="(Если передумаете, вы всегда можете изменить свой профиль)\nТеперь расскажите, чего вы желаете", 
+        text=lang._text("formating_profile_status","skip_profile_bio"), 
         reply_markup=Keybords.get_skip(
             dir_skip="skip.profile.wishlist"
             )
@@ -92,7 +92,7 @@ async def skip_profile_bio_calldata(origin: Client, data: types.CallbackQuery):
 @bot.on_callback_query(lambda orig, data: is_skip_profile_wishlist(data))
 async def skip_profile_wishlist_calldata(origin: Client, data: types.CallbackQuery):
     await data.message.edit_text(
-        text="(Если передумаете, вы всегда можете изменить свой профиль)\nПоследнее, укажите ваши соц сети, чтобы другие игроки знали, как в случае чего с вами связаться", 
+        text=lang._text("formating_profile_status","skip_profile_wishlist"), 
         reply_markup=Keybords.get_skip(
             dir_skip="skip.profile.links"
             )
@@ -108,29 +108,13 @@ async def skip_profile_links_calldata(origin: Client, data: types.CallbackQuery)
     userdata = users.get_user_status_userdata(data.from_user.id)
     
     await data.edit_message_text(
-            text="""
-Профиль сформирован!
-————————
-Псевдоним: {name}
-————————
-Возраст: {age}
-————————
-О себе: 
-{bio}
-————————
-Ваши пожелания: 
-{wishlist}
-————————
-Ваши ссылки: 
-{links}
-————————
-Проверьте себя: Если вас всё устраивает, нажмите на кнопку сохранить
-""".format(
-    name=userdata[0] if userdata[0] else lang._text("data.null"), 
-    age=userdata[1] if userdata[1] else lang._text("data.null"), 
-    bio=userdata[2] if userdata[2] else lang._text("data.null"), 
-    wishlist=userdata[3] if userdata[3] else lang._text("data.null"), 
-    links=userdata[4] if userdata[4] else lang._text("data.null"), 
+            text=lang._text("formating_profile_status","skip_profile_links")
+            .format(
+                name=userdata[0] if userdata[0] else lang._text("data.null"), 
+                age=userdata[1] if userdata[1] else lang._text("data.null"), 
+                bio=userdata[2] if userdata[2] else lang._text("data.null"), 
+                wishlist=userdata[3] if userdata[3] else lang._text("data.null"), 
+                links=userdata[4] if userdata[4] else lang._text("data.null"), 
     ),
 reply_markup=Keybords.keys_predone_profile())
 
@@ -150,7 +134,7 @@ async def create_profile_calldata(origin: Client, data: types.CallbackQuery):
         )
     
     await data.edit_message_text(
-        text="Теперь вы можете создать свою комнату:", 
+        text=lang._text("formating_profile_status","text.sugestion.room_creation"), 
         reply_markup=Keybords.get_start_no_room()
         )
     users.set_clear_user_status(data.from_user.id)

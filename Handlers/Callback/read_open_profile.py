@@ -18,25 +18,8 @@ async def read_open_profile(orig: Client, data: types.CallbackQuery):
     user_id = data.data.split("_")[2]
     userdata = rooms.get_data_user_in_room_id(room_id=room_id, user_id=user_id)
 
-
-    text = """
-Вот что {name} написал у себя в профиле:
-
-Возраст: {Age}
-————————
-О себе: 
-{Bio} 
-————————
-Хочу: 
-{Wishlist}
-————————
-Его ссылки на соц сети:
-{Soc_Nets}
-
-"""
-
     await data.message.edit_text(
-        text=text.format(
+        text=lang._text("read_open_profile.text.message").format(
             name=userdata["Name"],
             Age=userdata["Age"],
             Bio=userdata["Bio"],

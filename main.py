@@ -1,6 +1,6 @@
 from pyrogram import types, idle
 from Bot.loader import bot, log, lang
-import json, asyncio, requests
+import json, asyncio
 import logging
 logging.basicConfig(level=logging.INFO)
 import Handlers

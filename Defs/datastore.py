@@ -1,4 +1,4 @@
-import json
+import json, os
 from Defs.random_id import get_random_id
 from datetime import datetime
 from Defs.roll_users import *
@@ -9,6 +9,11 @@ class Gateway(object):
     path = str()
     def __init__(self, path: str):
         self.path = path
+        if not self.check_exist():
+            with open(self.path, "w+", encoding="UTF-8") as file: 
+                json.dump({}, file, indent=3, ensure_ascii=False)
+
+    def check_exist(self): return os.path.isfile(path=self.path)
 
     def read(self) -> dict:
         with open(self.path, "r", encoding="UTF-8") as file: 

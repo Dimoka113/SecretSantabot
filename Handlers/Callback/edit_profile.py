@@ -17,24 +17,7 @@ def is_edit_profile(data: types.CallbackQuery):
 async def open_profile_message(origin: Client, data: types.CallbackQuery):
     userdata = users.get_user_by_id(data.from_user.id)
     await data.edit_message_text(
-            text="""
-Ваш профиль:
-————————
-Псевдоним: {name}
-————————
-Возраст: {age}
-————————
-О себе: 
-{bio}
-————————
-Ваши пожелания: 
-{wishlist}
-————————
-Ваши ссылки: 
-{links}
-
-Выберите то, что вы хотите изменить:
-""".format(
+            text=lang._text("formating_profile_status","profile").format(
     name=userdata["Name"] if userdata["Name"] else lang._text("data.null"), 
     age=userdata["Age"] if userdata["Age"] else lang._text("data.null"), 
     bio=userdata["Bio"] if userdata["Bio"] else lang._text("data.null"), 
@@ -57,11 +40,11 @@ async def edit_profile(origin: Client, data: types.CallbackQuery):
     calldata = data.data.split(".")[2]
     back_keys = Keybords.get_cancel("start.userprofile")
 
-    if calldata == "change_name": text = "Хорошо, укажите другой псевдоним"
-    elif calldata == "change_age": text = "Хорошо, укажите другой возраст"
-    elif calldata == "change_bio": text = "Хорошо, укажите другое описание"
-    elif calldata == "change_wishlist": text = "Хорошо, укажите другие ваши предпочтения"
-    elif calldata == "change_netlinks": text = "Хорошо, укажите другие ваши соц сети"
+    if calldata == "change_name": text = lang._text("formating_profile_status","edit_predone_profile","text.change_name")
+    elif calldata == "change_age": text = lang._text("formating_profile_status","edit_predone_profile","text.change_age")
+    elif calldata == "change_bio": text = lang._text("formating_profile_status","edit_predone_profile","text.change_bio")
+    elif calldata == "change_wishlist": text = lang._text("formating_profile_status","edit_predone_profile","text.change_wishlist")
+    elif calldata == "change_netlinks": text = lang._text("formating_profile_status","edit_predone_profile","text.change_netlinks")
     else: log.warn(f"Not suppoted calldata: {calldata} (is_edit_profile)"); return False
 
     users.update_messagedata_status(data.from_user.id, data.message.chat.id, data.message.id)

@@ -12,7 +12,7 @@ def is_start_userrooms(data: types.CallbackQuery):
 @bot.on_callback_query(lambda orig, data: is_start_userrooms(data))
 async def open_profile_by_id(orig: Client, data: types.CallbackQuery):
     rdata = []
-    text = "<b>Список ваших комнат</b>:"
+    text = ""
     for i in users.get_user_rooms(data.from_user.id): 
         name = rooms.get_roomname_by_id(i)
         peer = rooms.get_number_users_in_room(i)
@@ -42,13 +42,8 @@ async def open_profile_by_id(orig: Client, data: types.CallbackQuery):
 
 
     await data.message.edit_text(
-        text="""
-<b>Вы открыли комнату</b>: {name}
-<b>Ссылка на комнату</b>: <a href='https://t.me/Secret113Santabot?start={room_id}'>{room_id}</a>
-<b>Лимит участников</b>: {limit}
-<b>Правила комнаты</b>: {rules}
-<b>Дата "Жеребьёвки"</b>: {date}
-""".format(
+        text = lang._text("open_rooms","text.message.edit_text")
+        .format(
     name=rooms.get_roomname_by_id(room_id),
     room_id=room_id,
     limit=rooms.get_peer_limit_by_id(room_id),

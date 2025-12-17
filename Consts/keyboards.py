@@ -114,7 +114,7 @@ class Keybords(object):
 
     
     @classmethod
-    def get_panel_room(self, room_id: str, user_perm: str, dir_cancel: str):
+    def get_panel_room(self, room_id: str, user_perm: str, dir_cancel: str = None):
         """
         #### `user_perm` can be: 
         ```["participant", "comadmin", "admin"]

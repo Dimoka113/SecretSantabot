@@ -45,7 +45,7 @@ async def edit_predone_profile(origin: Client, data: types.CallbackQuery):
     calldata = data.data.split(".")[2]
     back_keys = Keybords.get_cancel("back.profile.predone")
 
-    if calldata == "change_name": text = "Хорошо, укажите другой псевдоним"
+    if calldata == "change_name": text = lang._text("edits", "text.edit.change_name")
     elif calldata == "change_age": text = "Хорошо, укажите другой возраст"
     elif calldata == "change_bio": text = "Хорошо, укажите другое описание"
     elif calldata == "change_wishlist": text = "Хорошо, укажите другие ваши предпочтения"

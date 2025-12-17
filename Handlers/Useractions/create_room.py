@@ -30,8 +30,7 @@ async def set_create_room(origin: Client, msg: types.Message):
 
     if status == "create_room.name":
         newstatus = "create_room.peer_limit"
-        data_edittext = lang._text("nameroom.done")
-        edit_text = data_edittext[random.randint(0, len(data_edittext)-1)].format(name=text)
+        edit_text = lang._text("nameroom.done").format(name=text)
         new_text = lang._text("newroom.peer_limit")
         reply_markup = Keybords.get_skip_and_cancel(
             dir_cancel="cancel.create_room",

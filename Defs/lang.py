@@ -1,5 +1,5 @@
 from Defs.datastore import Gateway
-
+import random
 
 class Lang(Gateway):
     """
@@ -12,7 +12,12 @@ class Lang(Gateway):
         filepath = path + "/" + lang + ".json"
         super().__init__(filepath)
 
-    def _text(self, *path: str) -> str|list[str]:
+    def _text(self, *path: str) -> str:
         data = self.read()
         for key in path: data = data[key]
-        return data
+
+        if isinstance(data, list): return data[random.randint(0, len(data)-1)]
+        elif isinstance(data, str): return data
+
+    def get_command(self) -> dict:
+        return self.read()["commands"]

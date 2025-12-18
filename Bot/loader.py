@@ -1,4 +1,4 @@
-from Bot.keys import API_ID, API_HASH, TOKEN
+from Bot.keys import API_ID, API_HASH, TOKEN, SESSION_NAME
 from pyrogram import Client
 from Defs.datastore import Rooms, Users
 from Defs.lang import Lang
@@ -7,14 +7,13 @@ from Defs.logger import Logger
 
 
 log = Logger(name="Main")
-log.level(Logger.types.DEBUG)
 
 rooms = Rooms("Data/data.rooms.json")
 users = Users("Data/data.users.json")
 lang = Lang("Data/Langs", "ru")
 
 bot = Client(
-    name="SecretSanta", api_id=API_ID, api_hash=API_HASH, bot_token=TOKEN,
+    name=SESSION_NAME, api_id=API_ID, api_hash=API_HASH, bot_token=TOKEN,
 
     workdir="Bot",
 

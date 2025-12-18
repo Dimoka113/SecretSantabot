@@ -131,6 +131,15 @@ class Keybords(object):
                 [[lang._text(self._, "open.settings_room"), f"settingsroom_{room_id}"]],
                 [[lang._text(self._, "back.key.text"), dir_cancel]],
             ])
+        
+        elif user_perm == "participant":
+            return create_keybord(
+            [
+                [[lang._text(self._, "rooms", "list_users"), f"listusers_{room_id}"]],
+                [[lang._text(self._, "rooms", "user_data"), f"userdata_{room_id}"]],
+                [[lang._text(self._, "rooms", "gift_user"), f"giftuser_{room_id}"]],
+                [[lang._text(self._, "back.key.text"), dir_cancel]],
+            ])
         else:
             raise Exception("Do not support!")
         

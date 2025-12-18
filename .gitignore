@@ -5,3 +5,4 @@ test.py
 
 Data/data.users.json
 Data/data.rooms.json
+Data/!*.json

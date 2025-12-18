@@ -13,14 +13,23 @@ def is_start_userrooms(data: types.CallbackQuery):
 async def open_profile_by_id(orig: Client, data: types.CallbackQuery):
     rdata = []
     text = ""
+    emoji_partic = lang._text("emoji_participant")
+    emoji_admin = lang._text("emoji_admin")
+    
     for i in users.get_user_rooms(data.from_user.id): 
+        admin_id = rooms.get_admins_by_id(i)
         name = rooms.get_roomname_by_id(i)
         peer = rooms.get_number_users_in_room(i)
         peer_limit = rooms.get_peer_limit_by_id(i)
         text = text + f'\n{name}: ({peer}/{peer_limit if peer_limit else "∞"})'
-        rdata.append([i, name])
-
         
+        if data.from_user.id == admin_id:
+            rdata.append([i, name + " " + emoji_admin])
+        #elif .. coadmin
+        else:
+            rdata.append([i, name + " " + emoji_partic])
+
+
     await data.message.edit_text(
         text=text,
         reply_markup=Keybords.get_list_rooms(room_ids=rdata)

@@ -99,7 +99,7 @@ class Rooms(Gateway):
         return self.read()[str(room_id)]["name"]
     
     def get_rules_by_id(self, room_id: str) -> str:
-        return self.read()[str(room_id)]["peer_limit"]
+        return self.read()[str(room_id)]["rule"]
     
     def get_peer_limit_by_id(self, room_id: str) -> str:
         return self.read()[str(room_id)]["peer_limit"]

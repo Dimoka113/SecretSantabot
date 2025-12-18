@@ -12,11 +12,11 @@ async def open_list_users_room(origin: Client, data: types.CallbackQuery):
     _, room_id = data.data.split("_")
     admin_id = int(rooms.get_admins_by_id(room_id))
     user_list = rooms.get_users_room_by_room_id(room_id)
-    end = [[u_id, users.get_username_by_id(u_id)]for u_id in user_list if u_id != admin_id]
-
+    end = [[u_id, rooms.get_data_user_in_room_id(room_id, u_id)["Name"]] for u_id in user_list if u_id != admin_id]
+    log.debug(end)
 
     await data.message.edit_text(
-        text=lang._text("room.open_list_user") if len(end)>1 else lang._text("room.open_list_user_only_admin"),
+        text=lang._text("room.open_list_user") if len(end)>=1 else lang._text("room.open_list_user_only_admin"),
         reply_markup=Keybords.get_keys_list_users(
             room_id=room_id, users=end, dir_cancel=f"openroom_{room_id}"
         )
@@ -33,9 +33,16 @@ def is_open_user_in_listusers(data: types.CallbackQuery):
 async def open_user_in_room(origin: Client, data: types.CallbackQuery):
     user_id = data.from_user.id
     _, room_id, open_user_id = data.data.split("_")
-
+    admin_id = int(rooms.get_admins_by_id(room_id))
     user_data = rooms.get_data_user_in_room_id(room_id, open_user_id)
 
+    if user_id == admin_id:
+        reply_markup = Keybords.get_keys_control_user(room_id, open_user_id, f"listusers_{room_id}")
+    # elif ...
+
+    else:
+        reply_markup = Keybords.get_cancel(f"listusers_{room_id}")
+    
     await data.message.edit_text(
         text=lang._text("open_list_users_room", "text.open.profile.in_room").format(
             name=user_data["Name"],
@@ -44,5 +51,5 @@ async def open_user_in_room(origin: Client, data: types.CallbackQuery):
             wishlist=user_data["Wishlist"],
             links=user_data["Soc_Nets"],
         ),
-        reply_markup=Keybords.get_keys_control_user(room_id, open_user_id, f"listusers_{room_id}")
+        reply_markup=reply_markup
     )

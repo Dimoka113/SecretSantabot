@@ -67,7 +67,7 @@ async def set_name_create_room(origin: Client, msg: types.Message):
             )
         
         new_message = await msg.reply(
-            text=lang._text("create_profile","wishlist","text.wishilist.edit"),
+            text=lang._text("create_profile","wishlist","text.wishlist.edit"),
             reply_markup=Keybords.get_skip(
                 dir_skip="skip.profile.wishlist"
                 )

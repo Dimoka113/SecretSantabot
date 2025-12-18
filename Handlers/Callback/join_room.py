@@ -61,20 +61,20 @@ async def join_manually_room_data(origin: Client, data: types.CallbackQuery):
         await data.message.edit_text(new_text)
 
         if not userdata[0]:
-            new = lang._text("join_room","userdata_naming","text.name")
+            new = lang._text("userdata_naming","text.name")
         elif not userdata[1]:
-            new = lang._text("join_room","userdata_naming","text.age")
+            new = lang._text("userdata_naming","text.age")
         elif not userdata[2]:
-            new = lang._text("join_room","userdata_naming","text.bio")
+            new = lang._text("userdata_naming","text.bio")
         elif not userdata[3]:
-            new = lang._text("join_room","userdata_naming","text.wishlist")
+            new = lang._text("userdata_naming","text.wishlist")
         elif not userdata[4]:
-            new = lang._text("join_room","userdata_naming","text.links")
+            new = lang._text("userdata_naming","text.links")
         else:
-            await data.message.reply("Так как вы выбрали всё, профиль был просто скопирован!")
+            await data.message.reply(lang._text("join_room","text.message"))
             rooms.add_user_in_room(room_id, users.get_data_user_by_id(data.from_user.id))
             return True
-        message = await data.message.reply(lang._text("join_room","text.message").format(new = new))
+        message = await data.message.reply(lang._text("join_room","text.edit").format(new = new))
         users.update_messagedata_status(user_id, message.chat.id, message.id)
         users.set_userdata_status_type(data.from_user.id, f"joinroom.manually.done_{room_id}")
         return True

@@ -37,7 +37,7 @@ async def set_name_create_room(origin: Client, msg: types.Message):
         await bot.edit_message_text(
             chat_id=chat_id,
             message_id=message_id,
-            text="{name}? Приятно познакомиться!".format(name=msg.text)
+            text=lang._text("create_profile","name").format(name=msg.text)
             )
         
         new_message = await msg.reply(

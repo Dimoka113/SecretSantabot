@@ -61,16 +61,16 @@ async def set_create_room(origin: Client, msg: types.Message):
         newstatus = ""
         date_roll = date_text(text, lang._text('months'))
         try:
-            edit_text = f"Вы указали такую дату:\n{date_roll}"
+            edit_text = lang._text("create_room","date").format(date_roll = date_roll)
         except:
-            await msg.reply("Такой формат даты не поддерживается!\nПример даты: (Пример: `31.12.2025 00:30`)")
+            await msg.reply(lang._text("create_room","date.error"))
             return False
         room_id = rooms.get_random_id()
         reply_markup = Keybords.get_panel_room(room_id, "admin")
 
         new_text = lang._text("newroom.create_done").format(
             name=userdata[0],
-            link=f"https://t.me/Secret113Santabot?start={room_id}",
+            link=lang._text("create_room","room.link"),
             limit=userdata[1],
             rules=userdata[2],
             date_roll=date_roll

@@ -18,20 +18,20 @@ async def selecttype_user_changedata_joinroom(
     old_msg = users.get_messagedata_status(msg.from_user.id)
     
 
-    if userdata[0] == False: userdata[0] = msg.text; new = "возраст"
-    if userdata[1] == False: userdata[1] = msg.text; new = "описание"
-    if userdata[2] == False: userdata[2] = msg.text; new = "пожелание"
-    if userdata[3] == False: userdata[3] = msg.text; new = "ссылки"
+    if userdata[0] == False: userdata[0] = msg.text; new = lang._text("userdata_naming","text.age")
+    if userdata[1] == False: userdata[1] = msg.text; new = lang._text("userdata_naming","text.bio")
+    if userdata[2] == False: userdata[2] = msg.text; new = lang._text("userdata_naming","text.wishlist")
+    if userdata[3] == False: userdata[3] = msg.text; new = lang._text("userdata_naming","text.links")
     if userdata[4] == False: userdata[4] = msg.text; new = ""
     else: new = ""
     
     await bot.edit_message_text(chat_id=old_msg[0],
                           message_id=old_msg[1],
-                          text=f"Вы указали: {msg.text}"
+                          text=lang._text("manually_join_room","text.message.check").format(text = msg.text)
                           
                           )
     if new:
-        new_msg = await msg.reply(f"Теперь укажите {new}")
+        new_msg = await msg.reply(lang._text("manually_join_room","text.message.new").format(new = new))
         users.update_messagedata_status(msg.from_user.id, new_msg.chat.id, new_msg.id)
     else:
         new_data_user = {
@@ -48,4 +48,4 @@ async def selecttype_user_changedata_joinroom(
         users.add_user_in_room(room_id, msg.from_user.id)      
 
         users.set_clear_user_status(msg.from_user.id)
-        await msg.reply("Новый профиль успешно сохранён!")
+        await msg.reply(lang._text("manually_join_room","text.message.loaded"))

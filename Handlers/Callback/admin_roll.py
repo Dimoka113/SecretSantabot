@@ -17,9 +17,9 @@ async def admin_roll(orig: Client, data: types.CallbackQuery):
 
     if calldata == "yes":
         await data.message.edit_text(
-            text="Хорошо, выберите указать ваши данные из вашего профиля, или указать вручную:",                    
+            text=lang._text("run_roll","admin","text.message"),
             reply_markup=Keybords.join_room_user_keys(room_id=room_id)
         )
 
     else:
-        await data.message.edit_text("Хорошо, вы не будете учитываться в жеребьёвке")
+        await data.message.edit_text(lang._text("run_roll","admin","text.message.edit"))

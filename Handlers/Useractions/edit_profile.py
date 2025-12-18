@@ -47,24 +47,7 @@ async def predone_edit_profile_content(origin: Client, msg: types.Message):
     await bot.edit_message_text(
         chat_id=messagedata[0],
         message_id=messagedata[1],
-        text="""
-Ваш профиль:
-————————
-Псевдоним: {name}
-————————
-Возраст: {age}
-————————
-О себе: 
-{bio}
-————————
-Ваши пожелания: 
-{wishlist}
-————————
-Ваши ссылки: 
-{links}
-
-Выберите то, что вы хотите изменить:
-""".format(
+        text=lang._text("formating_profile_status","profile").format(
     name=userdata["Name"] if userdata["Name"] else lang._text("data.null"), 
     age=userdata["Age"] if userdata["Age"] else lang._text("data.null"), 
     bio=userdata["Bio"] if userdata["Bio"] else lang._text("data.null"), 
@@ -95,24 +78,7 @@ async def predone_edit_profile_content(origin: Client, msg: types.Message):
     
     await bot.edit_message_text(
         chat_id=messagedata[0], message_id=messagedata[1],
-            text="""
-Профиль сформирован!
-————————
-Псевдоним: {name}
-————————
-Возраст: {age}
-————————
-О себе: 
-{bio}
-————————
-Ваши пожелания: 
-{wishlist}
-————————
-Ваши ссылки: 
-{links}
-————————
-Проверьте себя: Если вас всё устраивает, нажмите на кнопку сохранить
-""".format(
+            text=lang._text("create_profile","profile").format(
     name=userdata[0] if userdata[0] else lang._text("data.null"), 
     age=userdata[1] if userdata[1] else lang._text("data.null"), 
     bio=userdata[2] if userdata[2] else lang._text("data.null"), 

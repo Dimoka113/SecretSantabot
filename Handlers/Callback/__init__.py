@@ -9,5 +9,7 @@ from . import (
     join_room, 
     admin_roll,
     back_start,
-    edit_profile
+    edit_profile,
+    open_list_users_room,
+    control_user
 )

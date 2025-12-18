@@ -125,7 +125,7 @@ class Rooms(Gateway):
     def get_number_users_in_room(self, room_id: str) -> int:
         return len(self.read()[str(room_id)]["users"])
     
-    def get_data_user_in_room_id(self, room_id: str, user_id: str, data: str = None) -> dict:
+    def get_data_user_in_room_id(self, room_id: str, user_id: str, data: str = None) -> dict|str:
         if data:
             return self.read()[str(room_id)]["users"][str(user_id)][data]
         else:
@@ -246,7 +246,7 @@ class Users(Gateway):
             return False
         
 
-    def remove_user_in_room(self, room_id: str, user_id: int):
+    def delete_user_in_room(self, room_id: str, user_id: int):
         data = self.read()
         data[str(user_id)]["rooms"].remove(room_id)
         return self.white(data)

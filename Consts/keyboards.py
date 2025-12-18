@@ -131,7 +131,6 @@ class Keybords(object):
                 [[lang._text(self._, "open.settings_room"), f"settingsroom_{room_id}"]],
                 [[lang._text(self._, "back.key.text"), dir_cancel]],
             ])
-        
         else:
             raise Exception("Do not support!")
         
@@ -180,5 +179,33 @@ class Keybords(object):
                 [
                     [lang._text(self._, "open_list_couples"), f"openlistcouples_{room_id}"],
                 ],
+            ]
+        )
+    
+    @classmethod
+    def get_keys_list_users(self, room_id: str, users: list[int], dir_cancel: str) -> types.InlineKeyboardMarkup:  
+        i = [[[i[1], f"open.user_{room_id}_{i[0]}"]] for i in users]
+        i.append([[lang._text(self._, "back.key.text"), dir_cancel]]) 
+        return create_keybord(i)
+    
+
+    @classmethod
+    def get_keys_control_user(self, room_id: str, user_id: int, dir_cancel: str) -> types.InlineKeyboardMarkup:  
+        return create_keybord(
+            [
+[[lang._text(self._, "users_control", "delete.text"), f"user.delete_{room_id}_{user_id}"]],
+[[lang._text(self._, "users_control", "coamin.text"), f"user.coamin_{room_id}_{user_id}"]],
+[[lang._text(self._, "users_control", "remove_coadmin.text"), f"user.removecoadmin_{room_id}_{user_id}"]],
+[[lang._text(self._, "users_control", "transfer.admin.text"), f"user.transfer_{room_id}_{user_id}"]],
+[[lang._text(self._, "back.key.text"), dir_cancel]],
+            ]
+        )
+    
+    @classmethod
+    def get_keys_delete_user(self, room_id: str, user_id: int, dir_cancel: str) -> types.InlineKeyboardMarkup:  
+        return create_keybord(
+            [
+[[lang._text(self._, "users_control", "sure.delete.user"), f"user.suredelete_{room_id}_{user_id}"]],
+[[lang._text(self._, "back.key.text"), dir_cancel]],
             ]
         )

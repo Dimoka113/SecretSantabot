@@ -20,7 +20,7 @@ async def start_runroll(orig: Client, data: types.CallbackQuery):
     rooms.run_roll_in_room_id(room_id=room_id)
     ddict = rooms.get_roolled_by_id(room_id)
     await data.message.reply(
-        text=f"Ручная жеребьёвка произошла, нажмите, чтобы посмотреть список пар:", 
+        text=lang._text("run_roll","text.click_event"),
         reply_markup=Keybords.get_list_partient(room_id=room_id)
         
         )
@@ -38,10 +38,11 @@ async def start_runroll(orig: Client, data: types.CallbackQuery):
         try:
             await bot.send_message(
     chat_id=int(user_id), 
-    text=f'''Ты Тайный Санта для: <a href="tg://user?id={played}">{rooms.get_data_user_in_room_id(room_id, played, "Name")}</a>''' 
-    + played_username_text
-
-    + '''\nБудем ждать, что же ты ему подаришь!''',
+    text=lang._text("run_roll","text.message_private").format(
+        name = {rooms.get_data_user_in_room_id(room_id, played, "Name")},
+          played = played, 
+          played_username_text = played_username_text
+        ),
     reply_markup=Keybords.get_keys_open_user_profile(room_id, played)
                 )
         except:

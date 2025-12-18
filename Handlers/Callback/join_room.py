@@ -48,38 +48,39 @@ async def join_manually_room_data(origin: Client, data: types.CallbackQuery):
 
         room_id = users.get_messagedata_type(data.from_user.id).split("_")[1]
 
-        new_text = (
-            "Вот что будет скопировано из профиля:\n"
-            + (f'Имя: {data_user["Name"]}\n'            if userdata[0] else "")
-            + (f'Возраст: {data_user["Age"]}\n'         if userdata[1] else "")
-            + (f'Описание:\n{data_user["Bio"]}\n'       if userdata[2] else "")
-            + (f'Пожаления:\n{data_user["Wishlist"]}\n' if userdata[3] else "")
-            + (f'Ссылки:\n{data_user["Soc_Nets"]}\n'    if userdata[4] else "")
+        new_text = (lang._text("join_room","profile_copy")
+                    .format(
+                        name = data_user["Name"] if userdata[0] else "",
+                        age = data_user["Age"] if userdata[0] else "",
+                        bio = data_user["Bio"] if userdata[0] else "",
+                        wishlist = data_user["Wishlist"] if userdata[0] else "",
+                        links = data_user["Soc_Nets"] if userdata[0] else ""
+                        )
         )
         
         await data.message.edit_text(new_text)
 
         if not userdata[0]:
-            new = "имя"
+            new = lang._text("join_room","userdata_naming","text.name")
         elif not userdata[1]:
-            new = "возраст"
+            new = lang._text("join_room","userdata_naming","text.age")
         elif not userdata[2]:
-            new = "описание"
+            new = lang._text("join_room","userdata_naming","text.bio")
         elif not userdata[3]:
-            new = "пожелание"
+            new = lang._text("join_room","userdata_naming","text.wishlist")
         elif not userdata[4]:
-            new = "ссылки"  
+            new = lang._text("join_room","userdata_naming","text.links")
         else:
             await data.message.reply("Так как вы выбрали всё, профиль был просто скопирован!")
             rooms.add_user_in_room(room_id, users.get_data_user_by_id(data.from_user.id))
             return True
-        message = await data.message.reply(f"Теперь укажите {new}, и оно будет использоваться в этой комнате")
+        message = await data.message.reply(lang._text("join_room","text.message").format(new = new))
         users.update_messagedata_status(user_id, message.chat.id, message.id)
         users.set_userdata_status_type(data.from_user.id, f"joinroom.manually.done_{room_id}")
         return True
     
     users.set_userdata_status(user_id, userdata)
-    edit_text = "Хорошо, выберите, что вы хотите скопировать из профиля:"
+    edit_text = lang._text("join_room","text.edit.copy")
     reply_markup = Keybords.keys_room_change_data(userdata)
     await data.message.edit_text(text=edit_text, reply_markup=reply_markup)
 
@@ -96,7 +97,7 @@ async def join_room_data(origin: Client, data: types.CallbackQuery):
     userdata = data.data.split(".")[1].split("_")
 
     if userdata[0] == "copy":
-        edit_text = "Данные успешно скопированы из вашего профиля!"
+        edit_text = lang._text("join_room","copy")
         rooms.add_user_in_room(userdata[1], users.get_data_user_by_id(data.from_user.id))
         users.add_user_in_room(userdata[1], data.from_user.id)
 
@@ -108,10 +109,10 @@ async def join_room_data(origin: Client, data: types.CallbackQuery):
 
         users.set_userdata_status_type(data.from_user.id, f"joinroom.manually_{userdata[1]}")
         users.set_userdata_status(data.from_user.id, data_add)
-        edit_text = "Хорошо, выберите, что вы хотите указать вручную:"
+        edit_text = lang._text("join_room","manualy")
         reply_markup = Keybords.keys_room_change_data(data_add)
         await data.message.edit_text(text=edit_text, reply_markup=reply_markup)
 
     elif userdata[0] == "cancel":
-        edit_text = "Вход в комнату отменён"
+        edit_text = lang._text("join_room","cansel")
         await data.message.edit_text(edit_text)

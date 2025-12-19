@@ -1,4 +1,4 @@
-from Bot.loader import bot, lang, rooms, users
+from Bot.loader import bot, lang, rooms, users, databot
 from Data import config
 from pyrogram import Client, types, filters
 from Consts.keyboards import Keybords
@@ -11,7 +11,7 @@ def is_set_create_room(msg: types.Message):
     if msg.from_user:
         status = users.get_messagedata_type(msg.from_user.id)
         if status:
-            if "create_room" in status.split("."):
+            if "create_room" in status:
                 return True
 
     return False
@@ -73,7 +73,8 @@ async def set_create_room(origin: Client, msg: types.Message):
             link=lang._text("create_room","room.link"),
             limit=userdata[1],
             rules=userdata[2],
-            date_roll=date_roll
+            date_roll=date_roll,
+            botusername=databot.username,
             )
 
 

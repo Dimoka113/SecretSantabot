@@ -66,6 +66,7 @@
     
     
     "_log_staring_message": "Бот для проведения Тайного Санты запущен!",
+    "_log_data_bot_done": "Информация о боте: {botname} (@{botusername})\n",
     "start_message": "Привет, это бот для проведения Тайного Санты!",
     "start_message_noprofile": "Привет, это бот для проведения Тайного Санты!\nЧтобы начать вам нужно создать свой профиль!",
     "join_message": "Вы собираетесь присоединиться в комнату: {name}\nВыберите: использовать все данные из вашего профиля или указать отдельно для этой комнаты",
@@ -132,7 +133,7 @@
     },
     "open_rooms":{
         "text.room_list":"<b>Список ваших комнат</b>:",
-        "text.message.edit_text":"<b>Вы открыли комнату</b>: {name}\n<b>Ссылка на комнату</b>: <a href='https://t.me/Secret113Santabot?start={room_id}'>{room_id}</a>\n<b>Лимит участников</b>: {limit}\n<b>Правила комнаты</b>: {rules}\n<b>Дата \"Жеребьевки\"</b>: {date}"
+        "text.message.edit_text":"<b>Вы открыли комнату</b>: {name}\n<b>Ссылка на комнату</b>: <a href='https://t.me/{botusername}?start={room_id}'>{room_id}</a>\n<b>Лимит участников</b>: {limit}\n<b>Правила комнаты</b>: {rules}\n<b>Дата \"Жеребьевки\"</b>: {date}"
     },
     "read_open_profile.text.message":"Вот что {name} написал у себя в профиле:\nВозраст: {Age}\n————————\nО себе: \n{Bio} \n————————\nХочет: \n{Wishlist}\n————————\nСсылки на соц. сети:\n{Soc_Nets}",
     "create_profile":{
@@ -159,7 +160,7 @@
     "create_room":{
         "date":"Вы указали такую дату:\n{date_roll}",
         "date.error":"Такой формат даты не поддерживается!\n(Время по МСК. Пример ввода: 20.12.2025 12:00)",
-        "room.link":"https://t.me/Secret113Santabot?start={room_id}"
+        "room.link":"https://t.me/{botusername}?start={room_id}"
     },
     "manually_join_room":{
         "text.message.check":"Вы указали: {text}",

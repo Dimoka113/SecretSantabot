@@ -1,9 +1,45 @@
-import json, os
+import json, os, asyncio
 from Defs.random_id import get_random_id
 from datetime import datetime
 from Defs.roll_users import *
+from pyrogram import types, Client
+from Defs.logger import Logger
 
 
+class DataBot(object):
+    logger = None
+    id = int()
+    is_deleted = bool()    
+    is_frozen = bool()      
+    is_bot = bool()
+    is_verified = bool()
+    is_premium = bool()
+    first_name = str()
+    username = str()
+    dc_id = int(),
+
+    def __init__(self, logger: Logger):
+        self.logger = logger
+
+    async def update_bot(self, bot: Client) -> bool:
+        try:
+            data = await bot.get_me()
+            self.id = data.id
+            self.is_deleted = data.is_deleted
+            self.is_frozen = data.is_frozen    
+            self.is_bot = data.is_bot
+            self.is_verified = data.is_verified
+            self.is_premium = data.is_premium
+            self.first_name = data.first_name
+            self.username = data.username
+            self.dc_id = data.dc_id
+        except:
+            self.logger.crit(
+"We couldn't get the bot info. Did you make sure you put in the right details?"
+                )
+            return False
+        else:
+            return True
 
 class Gateway(object):
     path = str()

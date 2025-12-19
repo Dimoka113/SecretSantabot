@@ -19,14 +19,16 @@ from Defs.keyboard import create_keybord_links
 # [[lang._text(self._, "back.key.text"), dir_cancel]],
 
 def is_edit_profile_content(msg: types.Message):
-    content = users.get_messagedata_type(msg.from_user.id).split(".")
-    if (len(content) > 1 and content[0] == "profile" and content[1] == "edit"): 
-        return True
+    content = users.get_messagedata_type(msg.from_user.id)
+    if content:
+        if ("profile" in content and "edit" in content): 
+            return True
 
 def is_edit_predone_profile_content(msg: types.Message):
-    content = users.get_messagedata_type(msg.from_user.id).split(".")
-    if (len(content) > 1 and content[0] == "create_profile" and content[1] == "edit"): 
-        return True
+    content = users.get_messagedata_type(msg.from_user.id)
+    if content:
+        if ("create_profile" in content and content == "edit"): 
+            return True
     
 
 @bot.on_message(lambda orig, data: is_edit_profile_content(data))

@@ -1,4 +1,4 @@
-from Bot.loader import bot, lang, users, rooms
+from Bot.loader import bot, lang, users, rooms, databot
 from Data import config
 from pyrogram import Client, types, filters
 from Consts.keyboards import Keybords
@@ -55,7 +55,7 @@ async def createroom_date_roll(origin: Client, data: types.CallbackQuery):
 
     new_text = lang._text("newroom.create_done").format(
         name=userdata[0],
-        link=f"https://t.me/Secret113Santabot?start={room_id}",
+        link=f"https://t.me/{databot.username}?start={room_id}",
         limit=userdata[1],
         rules=userdata[2],
         date_roll=dateform

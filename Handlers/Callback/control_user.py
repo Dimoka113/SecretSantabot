@@ -1,4 +1,4 @@
-from Bot.loader import bot, lang, users, rooms
+from Bot.loader import bot, lang, users, rooms, log
 from Data import config
 from pyrogram import Client, types, filters
 from Consts.keyboards import Keybords
@@ -45,6 +45,17 @@ async def sure_delete_user_call(orig: Client, data: types.CallbackQuery):
     if user_id == admin_id:
         rooms.delete_user_in_room(room_id, delete_user_id)
         users.delete_user_in_room(room_id, delete_user_id)
+        
+        user_list = rooms.get_users_room_by_room_id(room_id)
+        end = [[u_id, rooms.get_data_user_in_room_id(room_id, u_id)["Name"]] for u_id in user_list if u_id != admin_id]
+        log.debug(end)
+        await data.message.edit_text(
+            text=lang._text("room.open_list_user") if len(end)>=1 else lang._text("room.open_list_user_only_admin"),
+            reply_markup=Keybords.get_keys_list_users(
+                room_id=room_id, users=end, dir_cancel=f"openroom_{room_id}"
+            )
+        )
+        
     else:
         await data.answer(
             text=lang._text("alerts", "notadmin"),

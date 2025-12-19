@@ -1,4 +1,4 @@
-from Bot.loader import bot, lang, users, rooms
+from Bot.loader import bot, lang, users, rooms, databot
 from Data import config
 from pyrogram import Client, types, filters
 from Consts.keyboards import Keybords
@@ -53,6 +53,7 @@ async def open_profile_by_id(orig: Client, data: types.CallbackQuery):
     await data.message.edit_text(
         text = lang._text("open_rooms","text.message.edit_text")
         .format(
+    botusername=databot.username,
     name=rooms.get_roomname_by_id(room_id),
     room_id=room_id,
     limit=rooms.get_peer_limit_by_id(room_id),

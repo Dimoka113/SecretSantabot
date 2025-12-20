@@ -19,7 +19,8 @@ async def open_list_users_room(origin: Client, data: types.CallbackQuery):
         text=lang._text("room.open_list_user") if len(end)>=1 else lang._text("room.open_list_user_only_admin"),
         reply_markup=Keybords.get_keys_list_users(
             room_id=room_id, users=end, dir_cancel=f"openroom_{room_id}"
-        )
+        ),
+        disable_web_page_preview=config.disable_web_page_preview
     )
 
 
@@ -51,5 +52,6 @@ async def open_user_in_room(origin: Client, data: types.CallbackQuery):
             wishlist=user_data["Wishlist"],
             links=user_data["Soc_Nets"],
         ),
-        reply_markup=reply_markup
+        reply_markup=reply_markup,
+        disable_web_page_preview=config.disable_web_page_preview
     )

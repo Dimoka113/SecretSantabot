@@ -36,7 +36,8 @@ async def open_list_couple(orig: Client, data: types.CallbackQuery):
         #f'\n{num}. <a href="tg://user?id={peer}">{santa_name}</a> > <a href="tg://user?id={ddict[peer]}">{sender_name}</a>'
 
     await data.message.edit_text(
-        text=text
+        text=text,
+        disable_web_page_preview=config.disable_web_page_preview
     )
 
 

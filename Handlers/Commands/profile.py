@@ -17,7 +17,12 @@ async def start_command(origin: Client, msg: types.Message):
         wishlist=userdata["Wishlist"] if userdata["Wishlist"] else lang._text("data.null"),  
         links=userdata["Soc_Nets"] if userdata["Soc_Nets"] else lang._text("data.null"), 
         ),
-        reply_markup=Keybords.keys_open_profile("start.main")
+        reply_markup=Keybords.keys_open_profile("start.main"),
+        disable_web_page_preview=config.disable_web_page_preview
     )
     else:
-        await msg.reply(text=lang._text("start_message_noprofile"), reply_markup=Keybords.create_profile())
+        await msg.reply(
+            text=lang._text("start_message_noprofile"), 
+            reply_markup=Keybords.create_profile(),
+            disable_web_page_preview=config.disable_web_page_preview
+            )

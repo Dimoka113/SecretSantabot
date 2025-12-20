@@ -9,11 +9,11 @@ async def start_command(origin: Client, msg: types.Message):
     if len(msg.text.split()) == 1:
         if users.is_users_exist(user_id):
             if len(users.get_user_rooms(user_id)) != 0:
-                await msg.reply(text=lang._text("start_message"), reply_markup=Keybords.get_start_all())
+                await msg.reply(text=lang._text("start_message"), reply_markup=Keybords.get_start_all(), disable_web_page_preview=config.disable_web_page_preview)
             else:
-                await msg.reply(text=lang._text("start_message"), reply_markup=Keybords.get_start_no_room())
+                await msg.reply(text=lang._text("start_message"), reply_markup=Keybords.get_start_no_room(), disable_web_page_preview=config.disable_web_page_preview)
         else:
-            await msg.reply(text=lang._text("start_message_noprofile"), reply_markup=Keybords.create_profile())
+            await msg.reply(text=lang._text("start_message_noprofile"), reply_markup=Keybords.create_profile(), disable_web_page_preview=config.disable_web_page_preview)
 
     else:
         if users.is_users_exist(user_id):
@@ -22,20 +22,26 @@ async def start_command(origin: Client, msg: types.Message):
             if admin_id == user_id:
                 await msg.reply(
                     text=lang._text("user.join_room.admin_room").format(name=rooms.get_roomname_by_id(room_id=room_id)),
-
+                    disable_web_page_preview=config.disable_web_page_preview
                     )
                 return False
             elif user_id in rooms.get_users_room_by_room_id(room_id):
                 await msg.reply(
                     text=lang._text("user.join_room.already").format(name=rooms.get_roomname_by_id(room_id=room_id)),
+                    disable_web_page_preview=config.disable_web_page_preview
                     )
                 return False
             else:
                 await msg.reply(
                     text=lang._text("join_message").format(name=rooms.get_roomname_by_id(room_id=room_id)), 
-                    reply_markup=Keybords.join_room_user_keys(room_id=room_id)
+                    reply_markup=Keybords.join_room_user_keys(room_id=room_id),
+                    disable_web_page_preview=config.disable_web_page_preview
                     )
         else:
             users.add_zero_user(user_id)
             users.set_status_origin(user_id, msg.text.split()[1])
-            await msg.reply(text=lang._text("join_message_noprofile"), reply_markup=Keybords.create_profile())
+            await msg.reply(
+                text=lang._text("join_message_noprofile"), 
+                reply_markup=Keybords.create_profile(),
+                disable_web_page_preview=config.disable_web_page_preview,
+                )

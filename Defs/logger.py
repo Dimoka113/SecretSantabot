@@ -45,7 +45,7 @@ Supports different names for different streams; by default, it has no name.
             prefix = f"[{self.thread_name}]" if self.thread_name else ""
             print(f"{color}[{tag}]{f' {prefix}' if prefix else ''} {' '.join(str(x) for x in text)}{self.colors.reset}")
 
-
+    @classmethod
     def level(self, log_level): self.logging = log_level
 
     def debug(self, *text): self._log("DEBUG", text, "", "debug")

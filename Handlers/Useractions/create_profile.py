@@ -37,7 +37,8 @@ async def set_name_create_room(origin: Client, msg: types.Message):
         await bot.edit_message_text(
             chat_id=chat_id,
             message_id=message_id,
-            text=lang._text("create_profile","name").format(name=msg.text)
+            text=lang._text("create_profile","name").format(name=msg.text),
+            disable_web_page_preview=config.disable_web_page_preview,
             )
         
         new_message = await msg.reply(
@@ -50,27 +51,31 @@ async def set_name_create_room(origin: Client, msg: types.Message):
         await bot.edit_message_text(
             chat_id=chat_id,
             message_id=message_id,
-            text=lang._text("create_profile","age","text.age.new").format(age=msg.text)
+            text=lang._text("create_profile","age","text.age.new").format(age=msg.text),
+            disable_web_page_preview=config.disable_web_page_preview,
             )
         
         new_message = await msg.reply(
             text=lang._text("create_profile","bio","text.bio.new"),
             reply_markup=Keybords.get_skip(
                 dir_skip="skip.profile.age"
-                )
+                ),
+            disable_web_page_preview=config.disable_web_page_preview,
             )
     elif len(status) == 2:
         await bot.edit_message_text(
             chat_id=chat_id,
             message_id=message_id,
-            text=lang._text("create_profile","bio","text.bio.new").format(bio=msg.text)
+            text=lang._text("create_profile","bio","text.bio.new").format(bio=msg.text),
+            disable_web_page_preview=config.disable_web_page_preview,
             )
         
         new_message = await msg.reply(
             text=lang._text("create_profile","wishlist","text.wishlist.edit"),
             reply_markup=Keybords.get_skip(
                 dir_skip="skip.profile.wishlist"
-                )
+                ),
+            disable_web_page_preview=config.disable_web_page_preview,
             )
     elif len(status) == 3:
         await bot.edit_message_text(
@@ -83,7 +88,8 @@ async def set_name_create_room(origin: Client, msg: types.Message):
             text=lang._text("create_profile","links","text.links.edit"),
             reply_markup=Keybords.get_skip(
                 dir_skip="skip.profile.SocNets"
-                )
+                ),
+            disable_web_page_preview=config.disable_web_page_preview,
             )
 
 
@@ -92,18 +98,21 @@ async def set_name_create_room(origin: Client, msg: types.Message):
             chat_id=chat_id,
             message_id=message_id,
             text=lang._text("create_profile","links","text.links.new").format(link=msg.text),
+            disable_web_page_preview=config.disable_web_page_preview,
             )
         userdata = users.get_user_status_userdata(msg.from_user.id)
         log.debug(userdata)
         new_message = await msg.reply(
             text=lang._text("create_profile","profile").format(
-    name=userdata[0] if userdata[0] else lang._text("data.null"), 
-    age=userdata[1] if userdata[1] else lang._text("data.null"), 
-    bio=userdata[2] if userdata[2] else lang._text("data.null"), 
-    wishlist=userdata[3] if userdata[3] else lang._text("data.null"), 
-    links=userdata[4] if userdata[4] else lang._text("data.null"), 
-    ),
-reply_markup=Keybords.keys_predone_profile())
+                name=userdata[0] if userdata[0] else lang._text("data.null"), 
+                age=userdata[1] if userdata[1] else lang._text("data.null"), 
+                bio=userdata[2] if userdata[2] else lang._text("data.null"), 
+                wishlist=userdata[3] if userdata[3] else lang._text("data.null"), 
+                links=userdata[4] if userdata[4] else lang._text("data.null"), 
+            ),
+            reply_markup=Keybords.keys_predone_profile(),
+            disable_web_page_preview=config.disable_web_page_preview
+        )
 
 
 

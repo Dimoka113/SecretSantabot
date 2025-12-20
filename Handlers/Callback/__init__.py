@@ -11,5 +11,7 @@ from . import (
     back_start,
     edit_profile,
     open_list_users_room,
-    control_user
+    control_user,
+    who_gift_user,
+    give_datauser_room
 )

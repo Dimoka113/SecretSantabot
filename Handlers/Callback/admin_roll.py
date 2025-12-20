@@ -18,8 +18,12 @@ async def admin_roll(orig: Client, data: types.CallbackQuery):
     if calldata == "yes":
         await data.message.edit_text(
             text=lang._text("run_roll","admin","text.message"),
-            reply_markup=Keybords.join_room_user_keys(room_id=room_id)
+            reply_markup=Keybords.join_room_user_keys(room_id=room_id),
+            disable_web_page_preview=config.disable_web_page_preview
         )
 
     else:
-        await data.message.edit_text(lang._text("run_roll","admin","text.message.edit"))
+        await data.message.edit_text(
+            text=lang._text("run_roll","admin","text.message.edit"),
+            disable_web_page_preview=config.disable_web_page_preview
+        )

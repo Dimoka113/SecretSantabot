@@ -167,6 +167,12 @@ class Rooms(Gateway):
         else:
             return self.read()[str(room_id)]["users"][str(user_id)]
 
+    def set_data_user_in_room_id(self, room_id: str, user_id: str, content: dict|str, data: str = None) -> dict|str:
+        userdata = self.read()
+        if data: userdata[str(room_id)]["users"][str(user_id)][data] = content
+        else: userdata[str(room_id)]["users"][str(user_id)] = content
+        return self.white(userdata)
+    
 class Users(Gateway):
     def __init__(self, path): 
         super().__init__(path)

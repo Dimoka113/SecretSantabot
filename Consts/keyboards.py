@@ -86,6 +86,18 @@ class Keybords(object):
         ])
     
     @classmethod
+    def keys_open_profile_in_room(self, room_id: str, dir_cancel: str) -> types.InlineKeyboardMarkup: 
+        return create_keybord(
+        [
+            [[lang._text(self._, "profile.predone.change_name"), f"dataroom.edit_{room_id}.change_name"]],
+            [[lang._text(self._, "profile.predone.change_age"), f"dataroom.edit_{room_id}.change_age"]],
+            [[lang._text(self._, "profile.predone.change_bio"), f"dataroom.edit_{room_id}.change_bio"]],
+            [[lang._text(self._, "profile.predone.change_wishlist"), f"dataroom.edit_{room_id}.change_wishlist"]],
+            [[lang._text(self._, "profile.predone.change_netlinks"), f"dataroom.edit_{room_id}.change_netlinks"]],
+            [[lang._text(self._, "back.key.text"), dir_cancel]],
+        ])
+    
+    @classmethod
     def get_skip_and_cancel(self, dir_cancel: str, dir_skip: str) -> types.InlineKeyboardMarkup:  
         return create_keybord(
         [
@@ -172,6 +184,26 @@ class Keybords(object):
             ]
         )
     
+    @classmethod
+    def get_keys_open_user_profile_back(self, room_id: str, user_id: str, dir_cancel: str) -> types.InlineKeyboardMarkup:  
+        return create_keybord(
+            [
+                [[lang._text(self._, "open_origin_userprofile"), f"back.openprofile_{room_id}_{user_id}"]],
+                [[lang._text(self._, "send_gift"), f"sendmessageeback_{room_id}_{user_id}"]],
+                [[lang._text(self._, "back.key.text"), dir_cancel]],
+            ]
+        )
+
+    @classmethod
+    def get_keys_open_room_profile_back(self, room_id: str, user_id: str, dir_cancel: str) -> types.InlineKeyboardMarkup:  
+        return create_keybord(
+            [
+                [[lang._text(self._, "open_origin_roombase"), f"back.openroomprofile_{room_id}_{user_id}"]],
+                [[lang._text(self._, "send_gift"), f"sendmessageeback_{room_id}_{user_id}"]],
+                [[lang._text(self._, "back.key.text"), dir_cancel]],
+            ]
+        )
+
     @classmethod
     def get_keys_open_room_profile(self, room_id: str, user_id: str) -> types.InlineKeyboardMarkup:  
         return create_keybord(

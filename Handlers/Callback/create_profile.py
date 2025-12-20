@@ -54,13 +54,20 @@ async def edit_predone_profile(origin: Client, data: types.CallbackQuery):
 
     users.update_messagedata_status(data.from_user.id, data.message.chat.id, data.message.id)
     users.set_userdata_status_type(data.from_user.id, f"create_profile.edit.{calldata}")
-    await data.edit_message_text(text, reply_markup=back_keys)
+    await data.edit_message_text(
+        text=text, 
+        reply_markup=back_keys,
+        disable_web_page_preview=config.disable_web_page_preview
+        )
 
 
 @bot.on_callback_query(lambda orig, data: is_create_profile(data))
 async def create_profile_calldata(origin: Client, data: types.CallbackQuery):
     users.add_zero_user(data.from_user.id)
-    await data.message.edit_text(text=lang._text("formating_profile_status","text.profile.name"))
+    await data.message.edit_text(
+        text=lang._text("formating_profile_status","text.profile.name"),
+        disable_web_page_preview=config.disable_web_page_preview
+        )
     users.update_messagedata_status(data.from_user.id, data.message.chat.id, data.message.id)
     users.set_userdata_status_type(data.from_user.id, "create_profile")
 
@@ -68,10 +75,11 @@ async def create_profile_calldata(origin: Client, data: types.CallbackQuery):
 @bot.on_callback_query(lambda orig, data: is_skip_profile_age(data))
 async def skip_profile_age_calldata(origin: Client, data: types.CallbackQuery):
     await data.message.edit_text(
-        text=lang._text("formating_profile_status","skip_profile_age"), 
-        reply_markup=Keybords.get_skip(
-            dir_skip="skip.profile.bio"
-            )
+            text=lang._text("formating_profile_status","skip_profile_age"), 
+            reply_markup=Keybords.get_skip(
+                dir_skip="skip.profile.bio"
+            ),
+            disable_web_page_preview=config.disable_web_page_preview
         )
     users.update_messagedata_status(data.from_user.id, data.message.chat.id, data.message.id)
     users.add_userdata_status(data.from_user.id, None)
@@ -83,7 +91,8 @@ async def skip_profile_bio_calldata(origin: Client, data: types.CallbackQuery):
         text=lang._text("formating_profile_status","skip_profile_bio"), 
         reply_markup=Keybords.get_skip(
             dir_skip="skip.profile.wishlist"
-            )
+        ),
+        disable_web_page_preview=config.disable_web_page_preview
         )
     users.update_messagedata_status(data.from_user.id, data.message.chat.id, data.message.id)
     users.add_userdata_status(data.from_user.id, None)
@@ -95,7 +104,8 @@ async def skip_profile_wishlist_calldata(origin: Client, data: types.CallbackQue
         text=lang._text("formating_profile_status","skip_profile_wishlist"), 
         reply_markup=Keybords.get_skip(
             dir_skip="skip.profile.links"
-            )
+        ),
+        disable_web_page_preview=config.disable_web_page_preview
         )
     users.update_messagedata_status(data.from_user.id, data.message.chat.id, data.message.id)
     users.add_userdata_status(data.from_user.id, None)
@@ -108,15 +118,17 @@ async def skip_profile_links_calldata(origin: Client, data: types.CallbackQuery)
     userdata = users.get_user_status_userdata(data.from_user.id)
     
     await data.edit_message_text(
-            text=lang._text("formating_profile_status","skip_profile_links")
+        text=lang._text("formating_profile_status","skip_profile_links")
             .format(
                 name=userdata[0] if userdata[0] else lang._text("data.null"), 
                 age=userdata[1] if userdata[1] else lang._text("data.null"), 
                 bio=userdata[2] if userdata[2] else lang._text("data.null"), 
                 wishlist=userdata[3] if userdata[3] else lang._text("data.null"), 
                 links=userdata[4] if userdata[4] else lang._text("data.null"), 
-    ),
-reply_markup=Keybords.keys_predone_profile())
+         ),
+        reply_markup=Keybords.keys_predone_profile(),
+        disable_web_page_preview=config.disable_web_page_preview
+    )
 
 
 
@@ -135,6 +147,7 @@ async def create_profile_calldata(origin: Client, data: types.CallbackQuery):
     
     await data.edit_message_text(
         text=lang._text("formating_profile_status","text.sugestion.room_creation"), 
-        reply_markup=Keybords.get_start_no_room()
+        reply_markup=Keybords.get_start_no_room(),
+        disable_web_page_preview=config.disable_web_page_preview
         )
     users.set_clear_user_status(data.from_user.id)

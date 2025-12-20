@@ -50,14 +50,15 @@ async def predone_edit_profile_content(origin: Client, msg: types.Message):
         chat_id=messagedata[0],
         message_id=messagedata[1],
         text=lang._text("formating_profile_status","profile").format(
-    name=userdata["Name"] if userdata["Name"] else lang._text("data.null"), 
-    age=userdata["Age"] if userdata["Age"] else lang._text("data.null"), 
-    bio=userdata["Bio"] if userdata["Bio"] else lang._text("data.null"), 
-    wishlist=userdata["Wishlist"] if userdata["Wishlist"] else lang._text("data.null"),  
-    links=userdata["Soc_Nets"] if userdata["Soc_Nets"] else lang._text("data.null"), 
-    ),
-reply_markup=Keybords.keys_open_profile("start.main")
-)
+            name=userdata["Name"] if userdata["Name"] else lang._text("data.null"), 
+            age=userdata["Age"] if userdata["Age"] else lang._text("data.null"), 
+            bio=userdata["Bio"] if userdata["Bio"] else lang._text("data.null"), 
+            wishlist=userdata["Wishlist"] if userdata["Wishlist"] else lang._text("data.null"),  
+            links=userdata["Soc_Nets"] if userdata["Soc_Nets"] else lang._text("data.null"), 
+            ),
+        reply_markup=Keybords.keys_open_profile("start.main"),
+        disable_web_page_preview=config.disable_web_page_preview
+    )
     
 
 @bot.on_message(lambda orig, data: is_edit_predone_profile_content(data))
@@ -81,10 +82,57 @@ async def predone_edit_profile_content(origin: Client, msg: types.Message):
     await bot.edit_message_text(
         chat_id=messagedata[0], message_id=messagedata[1],
             text=lang._text("create_profile","profile").format(
-    name=userdata[0] if userdata[0] else lang._text("data.null"), 
-    age=userdata[1] if userdata[1] else lang._text("data.null"), 
-    bio=userdata[2] if userdata[2] else lang._text("data.null"), 
-    wishlist=userdata[3] if userdata[3] else lang._text("data.null"), 
-    links=userdata[4] if userdata[4] else lang._text("data.null"), 
-    ),
-reply_markup=Keybords.keys_predone_profile())
+                name=userdata[0] if userdata[0] else lang._text("data.null"), 
+                age=userdata[1] if userdata[1] else lang._text("data.null"), 
+                bio=userdata[2] if userdata[2] else lang._text("data.null"), 
+                wishlist=userdata[3] if userdata[3] else lang._text("data.null"), 
+                links=userdata[4] if userdata[4] else lang._text("data.null"), 
+            ),
+        reply_markup=Keybords.keys_predone_profile(),
+        disable_web_page_preview=config.disable_web_page_preview
+    )
+
+
+def is_edit_dataroom_profile_content(msg: types.Message):
+    content = users.get_messagedata_type(msg.from_user.id)
+    if content:
+        if ("dataroom" in content and "edit" in content): 
+            return True
+        
+
+@bot.on_message(lambda orig, data: is_edit_dataroom_profile_content(data))
+async def edit_dataroom_profile_content(origin: Client, msg: types.Message):
+    user_id = msg.from_user.id
+    content = users.get_messagedata_type(user_id).split(".")
+    room_id = content[1].split("_")[1]
+    messagedata = users.get_messagedata_status(user_id)
+
+    if content[2] == "change_name": i = "Name"
+    elif content[2] == "change_age": i = "Age"
+    elif content[2] == "change_bio": i = "Bio"
+    elif content[2] == "change_wishlist": i = "Wishlist"
+    elif content[2] == "change_netlinks": i = "Soc_Nets"
+    else: log.warn(f"Not supported datatype {content} (is_edit_profile_content)"); return False
+    
+    rooms.set_data_user_in_room_id(
+        room_id=room_id,
+        user_id=user_id,
+        content=msg.text,
+        data=i,
+    )
+    
+    userdata = rooms.get_data_user_in_room_id(room_id, user_id)
+    users.set_clear_user_status(user_id)
+    
+    await bot.edit_message_text(
+        chat_id=messagedata[0], message_id=messagedata[1],
+            text=lang._text("formating_profile_status","profile").format(
+                name=userdata["Name"] if userdata["Name"] else lang._text("data.null"), 
+                age=userdata["Age"] if userdata["Age"] else lang._text("data.null"), 
+                bio=userdata["Bio"] if userdata["Bio"] else lang._text("data.null"), 
+                wishlist=userdata["Wishlist"] if userdata["Wishlist"] else lang._text("data.null"), 
+                links=userdata["Soc_Nets"] if userdata["Soc_Nets"] else lang._text("data.null"), 
+            ),
+        reply_markup=Keybords.keys_open_profile_in_room(room_id, f"openroom_{room_id}"),
+        disable_web_page_preview=config.disable_web_page_preview
+    )

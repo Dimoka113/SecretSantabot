@@ -25,9 +25,10 @@ async def delete_user_call(orig: Client, data: types.CallbackQuery):
     if user_id == admin_id:
         await data.message.edit_text(
             text=lang._text("delete.user.text").format(
-                user=rooms.get_data_user_in_room_id(room_id, delete_user_id, "Name"), ),
-            
-            reply_markup=Keybords.get_keys_delete_user(room_id, delete_user_id, f"open.user_{room_id}_{delete_user_id}")
+                user=rooms.get_data_user_in_room_id(room_id, delete_user_id, "Name"), 
+            ),
+            reply_markup=Keybords.get_keys_delete_user(room_id, delete_user_id, f"open.user_{room_id}_{delete_user_id}"),
+            disable_web_page_preview=config.disable_web_page_preview
         )
     else:
         await data.answer(
@@ -52,8 +53,11 @@ async def sure_delete_user_call(orig: Client, data: types.CallbackQuery):
         await data.message.edit_text(
             text=lang._text("room.open_list_user") if len(end)>=1 else lang._text("room.open_list_user_only_admin"),
             reply_markup=Keybords.get_keys_list_users(
-                room_id=room_id, users=end, dir_cancel=f"openroom_{room_id}"
-            )
+                room_id=room_id, 
+                users=end, 
+                dir_cancel=f"openroom_{room_id}"
+            ),
+            disable_web_page_preview=config.disable_web_page_preview
         )
         
     else:

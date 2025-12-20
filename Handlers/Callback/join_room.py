@@ -58,7 +58,10 @@ async def join_manually_room_data(origin: Client, data: types.CallbackQuery):
                         )
         )
         
-        await data.message.edit_text(new_text)
+        await data.message.edit_text(
+            text=new_text, 
+            disable_web_page_preview=config.disable_web_page_preview
+        )
 
         if not userdata[0]:
             new = lang._text("userdata_naming","text.name")
@@ -71,10 +74,16 @@ async def join_manually_room_data(origin: Client, data: types.CallbackQuery):
         elif not userdata[4]:
             new = lang._text("userdata_naming","text.links")
         else:
-            await data.message.reply(lang._text("join_room","text.message"))
+            await data.message.reply(
+                text=lang._text("join_room","text.message"), 
+                disable_web_page_preview=config.disable_web_page_preview
+            )
             rooms.add_user_in_room(room_id, users.get_data_user_by_id(data.from_user.id))
             return True
-        message = await data.message.reply(lang._text("join_room","text.edit").format(new = new))
+        message = await data.message.reply(
+            text=lang._text("join_room","text.edit").format(new = new), 
+            disable_web_page_preview=config.disable_web_page_preview
+        )
         users.update_messagedata_status(user_id, message.chat.id, message.id)
         users.set_userdata_status_type(data.from_user.id, f"joinroom.manually.done_{room_id}")
         return True
@@ -82,7 +91,11 @@ async def join_manually_room_data(origin: Client, data: types.CallbackQuery):
     users.set_userdata_status(user_id, userdata)
     edit_text = lang._text("join_room","text.edit.copy")
     reply_markup = Keybords.keys_room_change_data(userdata)
-    await data.message.edit_text(text=edit_text, reply_markup=reply_markup)
+    await data.message.edit_text(
+        text=edit_text, 
+        reply_markup=reply_markup, 
+        disable_web_page_preview=config.disable_web_page_preview
+    )
 
 
 # [[lang._text(self._, "user.join_room.copy_profile"), "joinroom.copy_{room_id}"]],
@@ -111,8 +124,15 @@ async def join_room_data(origin: Client, data: types.CallbackQuery):
         users.set_userdata_status(data.from_user.id, data_add)
         edit_text = lang._text("join_room","manualy")
         reply_markup = Keybords.keys_room_change_data(data_add)
-        await data.message.edit_text(text=edit_text, reply_markup=reply_markup)
+        await data.message.edit_text(
+            text=edit_text, 
+            reply_markup=reply_markup,
+            disable_web_page_preview=config.disable_web_page_preview
+            )
 
     elif userdata[0] == "cancel":
         edit_text = lang._text("join_room","cansel")
-        await data.message.edit_text(edit_text)
+        await data.message.edit_text(
+            text=edit_text, 
+            disable_web_page_preview=config.disable_web_page_preview
+            )

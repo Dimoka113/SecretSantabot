@@ -27,14 +27,18 @@ async def create_room(origin: Client, data: types.CallbackQuery):
     users.update_messagedata_status(data.from_user.id, data.message.chat.id, data.message.id)
     await data.message.edit_text(
         text=lang._text("newroom.name"), 
-        reply_markup=Keybords.get_cancel("cancel.create_room")
+        reply_markup=Keybords.get_cancel("cancel.create_room"),
+        disable_web_page_preview=config.disable_web_page_preview
         )
     
 @bot.on_callback_query(lambda orig, data: is_skip_create_room_peer_limit(data))
 async def skip_create_room_peer_limit(origin: Client, data: types.CallbackQuery):
     users.add_userdata_status(data.from_user.id, None)
     users.set_userdata_status_type(data.from_user.id, "create_room.rules")
-    await data.message.edit_text(lang._text("newroom.peer_no_limit"))
+    await data.message.edit_text(
+        text=lang._text("newroom.peer_no_limit"),
+        disable_web_page_preview=config.disable_web_page_preview
+        )
 
 
 @bot.on_callback_query(lambda orig, data: is_createroom_date_roll(data))
@@ -66,7 +70,8 @@ async def createroom_date_roll(origin: Client, data: types.CallbackQuery):
         chat_id=messagedata[0],
         message_id=messagedata[1],
         text=new_text,
-        reply_markup=reply_markup
+        reply_markup=reply_markup,
+        disable_web_page_preview=config.disable_web_page_preview
         )
     
     users.add_user_in_room(room_id, data.from_user.id)      
@@ -85,5 +90,6 @@ async def createroom_date_roll(origin: Client, data: types.CallbackQuery):
 
     await data.message.reply(
         text=lang._text("newroom.is_admin_roll"),
-        reply_markup=Keybords.admin_is_roll(room_id)
+        reply_markup=Keybords.admin_is_roll(room_id),
+        disable_web_page_preview=config.disable_web_page_preview
         )

@@ -37,13 +37,14 @@ async def start_runroll(orig: Client, data: types.CallbackQuery):
 
         try:
             await bot.send_message(
-    chat_id=int(user_id), 
-    text=lang._text("run_roll","text.message_private").format(
-        name =rooms.get_data_user_in_room_id(room_id, played, "Name"),
-          played = played, 
-          played_username_text = played_username_text
-        ),
-    reply_markup=Keybords.get_keys_open_user_profile(room_id, played)
-                )
+                chat_id=int(user_id), 
+                text=lang._text("run_roll","text.message_private").format(
+                    name =rooms.get_data_user_in_room_id(room_id, played, "Name"),
+                    played = played, 
+                    played_username_text = played_username_text
+                ),
+                reply_markup=Keybords.get_keys_open_user_profile(room_id, played),
+                disable_web_page_preview=config.disable_web_page_preview,
+            )
         except:
             pass

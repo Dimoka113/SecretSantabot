@@ -27,11 +27,14 @@ async def selecttype_user_changedata_joinroom(
     
     await bot.edit_message_text(chat_id=old_msg[0],
                           message_id=old_msg[1],
-                          text=lang._text("manually_join_room","text.message.check").format(text = msg.text)
-                          
+                          text=lang._text("manually_join_room","text.message.check").format(text = msg.text),
+                          disable_web_page_preview=config.disable_web_page_preview
                           )
     if new:
-        new_msg = await msg.reply(lang._text("manually_join_room","text.message.new").format(new = new))
+        new_msg = await msg.reply(
+            text=lang._text("manually_join_room","text.message.new").format(new = new),
+            disable_web_page_preview=config.disable_web_page_preview,
+            )
         users.update_messagedata_status(msg.from_user.id, new_msg.chat.id, new_msg.id)
     else:
         new_data_user = {
@@ -48,4 +51,7 @@ async def selecttype_user_changedata_joinroom(
         users.add_user_in_room(room_id, msg.from_user.id)      
 
         users.set_clear_user_status(msg.from_user.id)
-        await msg.reply(lang._text("manually_join_room","text.message.loaded"))
+        await msg.reply(
+            text=lang._text("manually_join_room","text.message.loaded"),
+            disable_web_page_preview=config.disable_web_page_preview,
+        )

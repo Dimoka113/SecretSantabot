@@ -81,12 +81,14 @@ async def set_create_room(origin: Client, msg: types.Message):
     await bot.edit_message_text(
         chat_id=messagedata[0],
         message_id=messagedata[1],
-        text=edit_text
+        text=edit_text,
+        disable_web_page_preview=config.disable_web_page_preview
         )
     
     new_message = await msg.reply(
         text=new_text,
-        reply_markup=reply_markup
+        reply_markup=reply_markup,
+        disable_web_page_preview=config.disable_web_page_preview
         )
         
     users.add_userdata_status(user_id, text)
@@ -111,5 +113,6 @@ async def set_create_room(origin: Client, msg: types.Message):
 
         await msg.reply(
             text=lang._text("newroom.is_admin_roll"),
-            reply_markup=Keybords.admin_is_roll(room_id)
+            reply_markup=Keybords.admin_is_roll(room_id),
+            disable_web_page_preview=config.disable_web_page_preview
             )

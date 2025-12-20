@@ -17,8 +17,20 @@ async def start_call(orig: Client, data: types.CallbackQuery):
     users.set_userdata_status_type(data.from_user.id, "")
     if users.is_users_exist(user_id):
         if len(users.get_user_rooms(user_id)) != 0:
-            await data.message.edit_text(text=lang._text("start_message"), reply_markup=Keybords.get_start_all())
+            await data.message.edit_text(
+                text=lang._text("start_message"), 
+                reply_markup=Keybords.get_start_all(),
+                disable_web_page_preview=config.disable_web_page_preview,
+                )
         else:
-            await data.message.edit_text(text=lang._text("start_message"), reply_markup=Keybords.get_start_no_room())
+            await data.message.edit_text(
+                text=lang._text("start_message"), 
+                reply_markup=Keybords.get_start_no_room(),
+                disable_web_page_preview=config.disable_web_page_preview,
+            )
     else:
-        await data.message.edit_text(text=lang._text("start_message_noprofile"), reply_markup=Keybords.create_profile())
+        await data.message.edit_text(
+            text=lang._text("start_message_noprofile"), 
+            reply_markup=Keybords.create_profile(),
+            disable_web_page_preview=config.disable_web_page_preview
+            )

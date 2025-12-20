@@ -18,15 +18,16 @@ async def open_profile_data(origin: Client, data: types.CallbackQuery):
     userdata = users.get_user_by_id(data.from_user.id)
     await data.edit_message_text(
         text = lang._text("formating_profile_status","profile")
-.format(
-    name=userdata["Name"] if userdata["Name"] else lang._text("data.null"), 
-    age=userdata["Age"] if userdata["Age"] else lang._text("data.null"), 
-    bio=userdata["Bio"] if userdata["Bio"] else lang._text("data.null"), 
-    wishlist=userdata["Wishlist"] if userdata["Wishlist"] else lang._text("data.null"),  
-    links=userdata["Soc_Nets"] if userdata["Soc_Nets"] else lang._text("data.null"), 
-    ),
-    reply_markup=Keybords.keys_open_profile("start.main")
-)
+            .format(
+                name=userdata["Name"] if userdata["Name"] else lang._text("data.null"), 
+                age=userdata["Age"] if userdata["Age"] else lang._text("data.null"), 
+                bio=userdata["Bio"] if userdata["Bio"] else lang._text("data.null"), 
+                wishlist=userdata["Wishlist"] if userdata["Wishlist"] else lang._text("data.null"),  
+                links=userdata["Soc_Nets"] if userdata["Soc_Nets"] else lang._text("data.null"), 
+        ),
+        reply_markup=Keybords.keys_open_profile("start.main"),
+        disable_web_page_preview=config.disable_web_page_preview
+    )
 
 
 @bot.on_callback_query(lambda orig, data: is_back_profile(data))
@@ -39,4 +40,8 @@ async def back_profile_data(origin: Client, data: types.CallbackQuery):
     else:
         text=lang._text("start_message_noprofile"); reply_markup=Keybords.create_profile()
 
-    await data.message.edit_text(text=text, reply_markup=reply_markup)
+    await data.message.edit_text(
+        text=text, 
+        reply_markup=reply_markup,
+        disable_web_page_preview=config.disable_web_page_preview
+    )

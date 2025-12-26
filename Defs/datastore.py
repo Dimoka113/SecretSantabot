@@ -173,6 +173,34 @@ class Rooms(Gateway):
         else: userdata[str(room_id)]["users"][str(user_id)] = content
         return self.white(userdata)
     
+class Hide_id(Gateway):
+    def __init__(self, path): 
+        super().__init__(path)
+
+    def check_exist_data(self):
+        data = self.read()
+        try:
+            if data["list_ids"]: return True
+        except:
+            data["list_ids"] = []
+            if not self.white(data):
+                raise("Error write")
+            return False
+        else:
+            return True
+
+    def check_by_id(self, user_id: int|str) -> bool:
+        return int(user_id) in self.read()["list_ids"]
+
+    def get_user_id(self, random_id: str) -> int:
+        return int(self.read()[random_id])
+    
+    def set_random_id(self, user_id: int | str) -> bool:
+        data = self.read()
+        data[get_random_id(user_id)] = str(user_id)
+        data["list_ids"].append(int(user_id))
+        return self.white(data)
+
 class Users(Gateway):
     def __init__(self, path): 
         super().__init__(path)

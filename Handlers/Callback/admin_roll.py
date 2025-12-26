@@ -1,4 +1,4 @@
-from Bot.loader import bot, lang, users
+from Bot.loader import bot, lang, users, hide
 from Data import config
 from pyrogram import Client, types, filters
 from Consts.keyboards import Keybords

@@ -1,4 +1,4 @@
-from Bot.loader import bot, lang, users, rooms, log
+from Bot.loader import bot, lang, users, rooms, log, hide
 from Data import config
 from pyrogram import Client, types, filters
 from Consts.keyboards import Keybords
@@ -41,8 +41,10 @@ async def delete_user_call(orig: Client, data: types.CallbackQuery):
 @bot.on_callback_query(lambda orig, data: is_delete_sure_user_call(data))
 async def sure_delete_user_call(orig: Client, data: types.CallbackQuery):
     user_id = data.from_user.id
-    _, room_id, delete_user_id = data.data.split("_")
+    _, room_id, hide_delete_user_id = data.data.split("_")
+    delete_user_id = hide.get_user_id(hide_delete_user_id)
     admin_id = rooms.get_admins_by_id(room_id)
+    
     if user_id == admin_id:
         rooms.delete_user_in_room(room_id, delete_user_id)
         users.delete_user_in_room(room_id, delete_user_id)

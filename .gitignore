@@ -3,6 +3,5 @@ __pycache__/
 /Bot/keys.py
 test.py
 
-Data/data.users.json
-Data/data.rooms.json
+Data/data.*.json
 Data/!*.json

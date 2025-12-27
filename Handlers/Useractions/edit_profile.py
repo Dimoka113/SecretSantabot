@@ -27,7 +27,7 @@ def is_edit_profile_content(msg: types.Message):
 def is_edit_predone_profile_content(msg: types.Message):
     content = users.get_messagedata_type(msg.from_user.id)
     if content:
-        if ("create_profile" in content and content == "edit"): 
+        if ("create_profile" in content and content.split(".")[1] == "edit"): 
             return True
     
 

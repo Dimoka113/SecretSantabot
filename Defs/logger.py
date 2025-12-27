@@ -22,7 +22,6 @@ Supports different names for different streams; by default, it has no name.
 
     def __init__(self, name=""):
         self.thread_name = name
-        self.logging = self.types.INFO
         
     class colors():
         green = "\033[32m"

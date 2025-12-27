@@ -185,6 +185,15 @@ class Keybords(object):
         )
     
     @classmethod
+    def get_keys_send_gift_users(self, room_id: str, user_id: str, dir_cancel: str) -> types.InlineKeyboardMarkup:  
+        return create_keybord(
+            [
+                [[lang._text(self._, "cancel.key.text"), dir_cancel]],
+                [[lang._text(self._, "user.done.gift"), f"senddonemessagee_{room_id}_{user_id}"]],
+            ]
+        )
+
+    @classmethod
     def get_keys_open_user_profile_back(self, room_id: str, user_id: str, dir_cancel: str) -> types.InlineKeyboardMarkup:  
         return create_keybord(
             [

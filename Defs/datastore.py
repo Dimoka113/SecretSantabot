@@ -79,8 +79,10 @@ class Rooms(Gateway):
     get_random_id = staticmethod(get_random_id)
     def __init__(self, path): 
         super().__init__(path)
-    
 
+    def __str__(self):
+        return str(self.read())
+    
     def create_room(self, 
     id: str,
     name: str, 
@@ -104,6 +106,7 @@ class Rooms(Gateway):
         "coadmins": [],
         "users": {},
         "roll": {},
+        "messages": {}
         }
         return self.white(data)
         # ...
@@ -173,10 +176,22 @@ class Rooms(Gateway):
         else: userdata[str(room_id)]["users"][str(user_id)] = content
         return self.white(userdata)
     
+    def white_new_message_gift(self, room_id: str, datetime: datetime, user_id: int, content: list[list[int]]):
+        data = self.read()
+        if str(user_id) in data[str(room_id)]["messages"]:
+            data[str(room_id)]["messages"][str(user_id)].append({str(datetime): content})
+        else:
+            data[str(room_id)]["messages"][str(user_id)] = [{str(datetime): content}]
+        return self.white(data)
+    
+
 class Users(Gateway):
     def __init__(self, path): 
         super().__init__(path)
-
+    
+    def __str__(self):
+        return str(self.read())
+    
     def add_zero_user(self, user_id: int):
         data = self.read()
         data[str(user_id)] = {"status": {"type": "", "origin": "", "messagedata": [], "userdata": []}, "rooms": []}
@@ -293,5 +308,35 @@ class Users(Gateway):
         data[str(user_id)]["rooms"].remove(room_id)
         return self.white(data)
 
+
+    def check_media_group_exist(self, user_id: int|str, media_group_id: int):
+        data = self.get_user_status_userdata(user_id)
+        for i in data:
+            if len(i) == 3:
+                if int(media_group_id) == int(i[2]): 
+                    return True
+        return False
+
+    def remove_temp_message_by_id(self, message_id: int|str) -> bool|int:
+        """
+        Docstring for remove_temp_message_by_id
+        
+        :param message_id: Message for delete.
+        :type message_id: int | str
+        return bool 
+        
+        False if message not found or int user_id who delete message
+        """
+
+        data = self.read()
+        for user_id in data:
+            for i in data[user_id]["status"]["userdata"]:
+                if i[1] == int(message_id):
+                    data[user_id]["status"]["userdata"].remove(i)
+                    self.white(data)
+                    return int(user_id)
+            
+        return False
+    
 # r = Users("Data/users.json")
 # print(r.add_user(113, "Name", 23, "Ну вот что-то тут пишу", "Хочу что-то"))

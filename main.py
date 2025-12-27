@@ -1,12 +1,15 @@
-from pyrogram import types, idle
-from Bot.loader import bot, log, lang, databot
-import json, asyncio
-import logging
+from pyrogram import types, idle, Client
+
+# Set the logging level before creating the logger class.
+# (Otherwise, it will always be Logger.types.INFO)
 from Defs.logger import Logger
+Logger.level(Logger.types.DEBUG)
+
 import Handlers
+from Bot.loader import bot, log, lang, databot
 from utils.set_bot_commands import set_default_commands
 
-Logger.level(Logger.types.DEBUG)
+import logging
 logging.basicConfig(level=logging.INFO)
 
 

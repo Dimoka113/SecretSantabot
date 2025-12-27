@@ -8,9 +8,9 @@ class Lang(Gateway):
     
     """
 
-    def __init__(self, path: str, lang: str = "en"):
+    def __init__(self, path: str, lang: str = "en", logger = None):
         filepath = path + "/" + lang + ".json"
-        super().__init__(filepath)
+        super().__init__(filepath, logger)
 
     def _text(self, *path: str) -> str:
         data = self.read()

@@ -7,7 +7,7 @@ from Defs.logger import Logger
 
 
 class DataBot(object):
-    logger = None
+    logger: Logger = None
     id = int()
     is_deleted = bool()    
     is_frozen = bool()      
@@ -43,8 +43,12 @@ class DataBot(object):
 
 class Gateway(object):
     path = str()
-    def __init__(self, path: str):
+    logger: Logger = None
+
+    def __init__(self, path: str, logger: Logger = None):
         self.path = path
+        self.logger = logger
+
         if not self.check_exist():
             with open(self.path, "w+", encoding="UTF-8") as file: 
                 json.dump({}, file, indent=3, ensure_ascii=False)
@@ -56,8 +60,7 @@ class Gateway(object):
             try:
                 return json.load(file)
             except json.decoder.JSONDecodeError as err:
-                from Bot.loader import log
-                log.warn(err)
+                self.logger.warn(err)
                 return {}
 
     def white(self, data: dict) -> bool:
@@ -69,16 +72,15 @@ If unsuccessful, outputs a log with `WARN` and returns `False`.
         try: 
             with open(self.path, "w", encoding="UTF-8") as file: json.dump(data, file, indent=3, ensure_ascii=False)
         except Exception as err:
-            from Bot.loader import log
-            log.warn(err)
+            self.logger.warn(err)
             return False
         else: return True
 
 
 class Rooms(Gateway):
     get_random_id = staticmethod(get_random_id)
-    def __init__(self, path): 
-        super().__init__(path)
+    def __init__(self, path, logger: Logger = None): 
+        super().__init__(path, logger)
 
     def __str__(self):
         return str(self.read())
@@ -186,9 +188,9 @@ class Rooms(Gateway):
     
 
 class Users(Gateway):
-    def __init__(self, path): 
-        super().__init__(path)
-    
+    def __init__(self, path, logger: Logger = None): 
+        super().__init__(path, logger)
+
     def __str__(self):
         return str(self.read())
     

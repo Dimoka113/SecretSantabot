@@ -7,11 +7,10 @@ from Defs.logger import Logger
 
 
 log = Logger(name="Main")
-
-rooms = Rooms("Data/data.rooms.json")
-users = Users("Data/data.users.json")
-lang = Lang("Data/Langs", "ru")
-databot = DataBot(logger=log)
+rooms = Rooms("Data/data.rooms.json", logger=Logger(name="Rooms"))
+users = Users("Data/data.users.json", logger=Logger(name="Users"))
+lang = Lang("Data/Langs", "ru", logger=Logger(name="Langs"))
+databot = DataBot(logger=Logger(name="Bot"))
 
 
 bot = Client(

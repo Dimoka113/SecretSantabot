@@ -22,7 +22,7 @@ async def set_create_room(origin: Client, msg: types.Message):
     if not msg.text:
         return False
     
-    text = msg.text
+    text:str = msg.text
     user_id = msg.from_user.id
     messagedata = users.get_messagedata_status(user_id)
     status = users.get_messagedata_type(user_id)
@@ -39,13 +39,16 @@ async def set_create_room(origin: Client, msg: types.Message):
 
         
     elif status == "create_room.peer_limit":
-        new_text = lang._text("newroom.room_rule")
-        newstatus = "create_room.rules"
-        edit_text = lang._text("newroom.peer_limit.done").format(limit=text)
-        reply_markup = Keybords.get_skip_and_cancel(
-            dir_cancel="cancel.create_room",
-            dir_skip="skip.create_room.date_roll"
+        if text.isdecimal():
+            new_text = lang._text("newroom.room_rule")
+            newstatus = "create_room.rules"
+            edit_text = lang._text("newroom.peer_limit.done").format(limit=text)
+            reply_markup = Keybords.get_skip_and_cancel(
+                dir_cancel="cancel.create_room",
+                dir_skip="skip.create_room.date_roll"
             )
+        else:
+            await msg.reply(text = lang._text("create_room","peer_limit.error") )
         
     elif status == "create_room.rules":
         newstatus = "create_room.date_roll"
@@ -59,8 +62,8 @@ async def set_create_room(origin: Client, msg: types.Message):
 
     elif status == "create_room.date_roll":
         newstatus = ""
-        date_roll = date_text(text, lang._text('months'))
         try:
+            date_roll = date_text(text, lang._text('months'))
             edit_text = lang._text("create_room","date").format(date_roll = date_roll)
         except:
             await msg.reply(lang._text("create_room","date.error"))

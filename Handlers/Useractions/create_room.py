@@ -48,7 +48,10 @@ async def set_create_room(origin: Client, msg: types.Message):
                 dir_skip="skip.create_room.date_roll"
             )
         else:
-            await msg.reply(text = lang._text("create_room","peer_limit.error") )
+            await msg.reply(
+                text=lang._text("create_room","peer_limit.error") 
+            )
+            return False
         
     elif status == "create_room.rules":
         newstatus = "create_room.date_roll"
@@ -62,12 +65,12 @@ async def set_create_room(origin: Client, msg: types.Message):
 
     elif status == "create_room.date_roll":
         newstatus = ""
-        try:
-            date_roll = date_text(text, lang._text('months'))
-            edit_text = lang._text("create_room","date").format(date_roll = date_roll)
-        except:
-            await msg.reply(lang._text("create_room","date.error"))
-            return False
+        # try:
+        date_roll = date_text(text, lang._text('months'))
+        edit_text = lang._text("create_room","date").format(date_roll = date_roll)
+        # except:
+        #     await msg.reply(lang._text("create_room","date.error"))
+        #     return False
         room_id = rooms.get_random_id()
         reply_markup = Keybords.get_panel_room(room_id, "admin")
 

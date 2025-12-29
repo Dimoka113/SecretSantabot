@@ -1,4 +1,4 @@
-from Bot.loader import bot, lang, users, rooms, databot
+from Bot.loader import bot, lang, users, rooms, databot, log
 from Data import config
 from pyrogram import Client, types, filters
 from Consts.keyboards import Keybords
@@ -8,9 +8,6 @@ def is_create_room(data: types.CallbackQuery):
     if data.data == "start.createroom": return True
     return False
 
-def is_skip_create_room_peer_limit(data: types.CallbackQuery):
-    if data.data == "skip.create_room.peer_limit": return True
-    return False
 
 def is_createroom_date_roll(data: types.CallbackQuery):
     spdata = data.data.split(".")
@@ -31,14 +28,36 @@ async def create_room(origin: Client, data: types.CallbackQuery):
         disable_web_page_preview=config.disable_web_page_preview
         )
     
-@bot.on_callback_query(lambda orig, data: is_skip_create_room_peer_limit(data))
+def is_skip_create_room(data: types.CallbackQuery):
+    if "skip.create_room" in data.data: return True
+    return False
+
+@bot.on_callback_query(lambda orig, data: is_skip_create_room(data))
 async def skip_create_room_peer_limit(origin: Client, data: types.CallbackQuery):
     users.add_userdata_status(data.from_user.id, None)
-    users.set_userdata_status_type(data.from_user.id, "create_room.rules")
-    await data.message.edit_text(
-        text=lang._text("newroom.peer_no_limit"),
-        disable_web_page_preview=config.disable_web_page_preview
-        )
+    _, stype, datetype = data.data.split(".")
+    
+    if datetype == "peer_limit":
+        users.set_userdata_status_type(data.from_user.id, "create_room.rules")
+        await data.message.edit_text(
+            text=lang._text("newroom.peer_no_limit"),
+            disable_web_page_preview=config.disable_web_page_preview,
+            reply_markup = Keybords.get_skip_and_cancel(
+                dir_cancel="cancel.create_room",
+                dir_skip="skip.create_room.date_roll"
+            )
+            )
+    elif datetype == "date_roll":
+        users.set_userdata_status_type(data.from_user.id, "create_room.date_roll")
+        await data.message.edit_text(
+            text=lang._text("newroom.no_rule"),
+            disable_web_page_preview=config.disable_web_page_preview,
+            reply_markup = Keybords.get_datetime_keys_and_cancel(
+            dir_cancel="cancel.create_room",
+            datenow=datetime.now(),
+            daysformats=[15,30,45],
+            )
+            )
 
 
 @bot.on_callback_query(lambda orig, data: is_createroom_date_roll(data))

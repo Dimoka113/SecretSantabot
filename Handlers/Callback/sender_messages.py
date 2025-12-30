@@ -52,75 +52,77 @@ async def cancel_update_data_to_send_messages(orig: Client, data: types.Callback
     date = datetime.now()
     user_data = users.get_user_status_userdata(user_id)
     message_data = users.get_messagedata_status(user_id)
+    if len(user_data) == 0:
+        await data.answer(lang._text("user.not.send_messages"))
+        return False
+    else:
+        rooms.white_new_message_gift(room_id, date, user_id, user_data)
+        users.set_clear_user_status(user_id)
 
-
-    rooms.white_new_message_gift(room_id, date, user_id, user_data)
-    users.set_clear_user_status(user_id)
-
-    await bot.edit_message_text(
-        chat_id=message_data[0],
-        message_id=message_data[1],
-        text=lang._text("text.message.send_origin"),
-    )
-    for message in user_data:
-        if len(message) == 3:
-            messages = await bot.get_media_group(message[0], message[1])
-            medias = []
-            for message in messages:
-                if message.video: 
-                    medias.append(
-                        types.InputMediaVideo(
-                            media=message.video.file_id,
-                            thumb=message.video.thumbs[0].file_id,
-                            caption=message.caption,
-                            caption_entities=message.caption_entities,
-                            width=message.video.width,
-                            height=message.video.height,
-                            duration=message.video.duration,
-                            file_name=message.video.file_name,
-                            supports_streaming=message.video.supports_streaming,
-                            has_spoiler=message.has_media_spoiler,
+        await bot.edit_message_text(
+            chat_id=message_data[0],
+            message_id=message_data[1],
+            text=lang._text("text.message.send_origin"),
+        )
+        for message in user_data:
+            if len(message) == 3:
+                messages = await bot.get_media_group(message[0], message[1])
+                medias = []
+                for message in messages:
+                    if message.video: 
+                        medias.append(
+                            types.InputMediaVideo(
+                                media=message.video.file_id,
+                                thumb=message.video.thumbs[0].file_id,
+                                caption=message.caption,
+                                caption_entities=message.caption_entities,
+                                width=message.video.width,
+                                height=message.video.height,
+                                duration=message.video.duration,
+                                file_name=message.video.file_name,
+                                supports_streaming=message.video.supports_streaming,
+                                has_spoiler=message.has_media_spoiler,
+                            )
                         )
-                    )
-                    
-                elif message.audio: 
-                    medias.append(
-                        types.InputMediaAudio(
-                            media=message.audio.file_id,
-                            thumb=message.audio.thumbs[0].file_id,
-                            caption=message.caption,
-                            caption_entities=message.caption_entities,
-                            duration=message.audio.duration,
-                            file_name=message.audio.file_name,
-                            performer=message.audio.performer,
-                            title=message.audio.title
+                        
+                    elif message.audio: 
+                        medias.append(
+                            types.InputMediaAudio(
+                                media=message.audio.file_id,
+                                thumb=message.audio.thumbs[0].file_id,
+                                caption=message.caption,
+                                caption_entities=message.caption_entities,
+                                duration=message.audio.duration,
+                                file_name=message.audio.file_name,
+                                performer=message.audio.performer,
+                                title=message.audio.title
+                            )
                         )
-                    )
-                elif message.photo: 
-                    medias.append(
-                        types.InputMediaPhoto(
-                            media=message.photo.file_id,
-                            caption=message.caption,
-                            caption_entities=message.caption_entities,
-                            has_spoiler=message.has_media_spoiler,
+                    elif message.photo: 
+                        medias.append(
+                            types.InputMediaPhoto(
+                                media=message.photo.file_id,
+                                caption=message.caption,
+                                caption_entities=message.caption_entities,
+                                has_spoiler=message.has_media_spoiler,
+                            )
                         )
-                    )
-                elif message.document: 
-                    medias.append(
-                        types.InputMediaDocument(
-                            media=message.document.file_id,
-                            thumb=message.document.thumbs[0].file_id,
-                            caption=message.caption,
-                            caption_entities=message.caption_entities,
-                            file_name=message.document.file_name,
+                    elif message.document: 
+                        medias.append(
+                            types.InputMediaDocument(
+                                media=message.document.file_id,
+                                thumb=message.document.thumbs[0].file_id,
+                                caption=message.caption,
+                                caption_entities=message.caption_entities,
+                                file_name=message.document.file_name,
+                            )
                         )
-                    )
 
 
-            await bot.send_media_group(played, medias)
-        else:
-            await bot.copy_message(played, message[0], message[1])
-        await bot.send_message(played, lang._text("text.on_reply_gift"))
+                await bot.send_media_group(played, medias)
+            else:
+                await bot.copy_message(played, message[0], message[1])
+            await bot.send_message(played, lang._text("text.on_reply_gift"))
 
 def is_send_messages(data: types.CallbackQuery):
     if "sendmessagee" in data.data:

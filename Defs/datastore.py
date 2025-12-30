@@ -186,6 +186,12 @@ class Rooms(Gateway):
             data[str(room_id)]["messages"][str(user_id)] = [{str(datetime): content}]
         return self.white(data)
     
+    def get_messages_in_room_peer(self, room_id: str, user_id: int) -> bool|list:
+        data = self.read()
+        if str(user_id) in data[str(room_id)]["messages"]:
+            return data[str(room_id)]["messages"][str(user_id)]
+        else:
+            return False
 
 class Users(Gateway):
     def __init__(self, path, logger: Logger = None): 

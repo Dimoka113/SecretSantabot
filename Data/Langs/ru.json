@@ -141,7 +141,10 @@
     },
     "open_list_couples":{
         "text.couples_list":"<b>Список пар в комнате</b> {room_name}:",
-        "text.text":"\n{num}. <a href='tg://user?id={peer}'>{santa_name}</a> > <a href='tg://user?id={ddict}'>{sender_name}</a>"
+        "text.couples_list.end": "\n\n(<i>Если после пары стоит {emoji}, значит санта отправил подарок!</i>)",
+        "text.text":"\n{num}. <a href='tg://user?id={peer}'>{santa_name}</a> > <a href='tg://user?id={ddict}'>{sender_name}</a>",
+        "emoji_done_gift": "✅"
+   
     },
     "open_rooms":{
         "text.room_list":"<b>Список ваших комнат</b>:",
@@ -195,6 +198,7 @@
     "delete.user.text": "Вы уверены, что хотите удалить {user}",
     "room.open_list_user": "Список участников в этой комнате:",
     "room.open_list_user_only_admin": "В комнате только вы!",
+    
     "emoji_save": "✅",
     "emoji_change": "❌",
     "emoji_yes": "👍",
